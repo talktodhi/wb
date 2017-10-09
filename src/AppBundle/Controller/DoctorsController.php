@@ -226,7 +226,7 @@ class DoctorsController extends Controller
     $result = [];
 
     // read the first line
-    $first = strtolower( fgets( $handle, 4096 ) );
+    $first = fgets( $handle, 4096 );
     // get the keys
     $keys = str_getcsv( $first );
 
