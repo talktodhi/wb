@@ -27,3 +27,25 @@ $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);
+
+function pr($array){
+    echo "<pre>";
+    print_r($array);
+}
+
+
+function prx($array){
+    echo "<pre>";
+    print_r($array);
+    exit;
+}
+
+
+function assoc_getcsv($csv_path) {
+        $f = array();
+        function parse_csv_assoc($str,&$f){ 
+        if (empty($f)) { $f = str_getcsv($str); }
+            return array_combine($f, str_getcsv($str));         
+        }
+        return array_values(array_slice(array_map('parse_csv_assoc', file($csv_path), $f),1));
+    }
