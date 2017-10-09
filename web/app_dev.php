@@ -43,12 +43,13 @@ function prx($array){
     exit;
 }
 
-
-function assoc_getcsv($csv_path) {
-        $f = array();
         function parse_csv_assoc($str,&$f){ 
         if (empty($f)) { $f = str_getcsv($str); }
             return array_combine($f, str_getcsv($str));         
         }
+		
+function assoc_getcsv($csv_path) {
+        $f = array();
+
         return array_values(array_slice(array_map('parse_csv_assoc', file($csv_path), $f),1));
     }
