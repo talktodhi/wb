@@ -37,6 +37,7 @@ class AppExtension extends \Twig_Extension
         );
     }
     
+    
     public function twigCheckInArry($value, $array){
         if(in_array($value,$array)){
             $return =   '1';

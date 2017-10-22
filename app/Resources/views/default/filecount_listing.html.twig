@@ -10,19 +10,19 @@
                     <a href="#">Home</a>
                 </li>
                 <li>
-                    <a href="#">Playerlog</a>
+                    <a href="#">Doctors</a>
                 </li>
                 <li class="active">Listing</li>
             </ul>
             <!-- /.breadcrumb -->
-            <div class="nav-search" id="nav-search">
+            <!--<div class="nav-search" id="nav-search">
                 <form class="form-search">
                     <span class="input-icon">
                     <input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
                     <i class="ace-icon fa fa-search nav-search-icon"></i>
                     </span>
                 </form>
-            </div>
+            </div>-->
             <!-- /.nav-search -->
         </div>
         <div class="page-content">
@@ -30,7 +30,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
-                    <form class="form-horizontal" action="{{ path('doctors_listing') }}" id='searchForm' role="form">
+                    <form class="form-horizontal" action="{{ path('filecount_listing') }}" id='searchForm' role="form">
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1"> Location ID :</label>
                             <div class="col-sm-9">
@@ -109,47 +109,34 @@
                             <table id="simple-table" class="table  table-bordered table-hover">
                                 <thead>
                                     <tr>
-                                        <!--<th class="center">
-                                            <label class="pos-rel">
-                                            <input type="checkbox" class="ace" />
-                                            <span class="lbl"></span>
-                                            </label>
-                                        </th>-->
                                         <th class="detail-col">Sr. No.</th>
                                         <th>Location ID</th>
-                                        <th>Title</th>
-                                        <th class="hidden-480">Played On</th>
+                                        <th>Device Id</th>
+                                        <th class="hidden-480">Status</th>
                                         <th>
-                                            <!--<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>-->
-                                            Artist Name
+                                            Downloads
                                         </th>
-                                        <th>
-                                            <!--<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>-->
-                                            Playlist Name
-                                        </th>
-                                        <th class="hidden-480">Category Name</th>
-                                        <th>TimeStamp</th>
+                                        <th>Version</th>
+                                        <th class="hidden-480">Updated Date</th>
+                                        <th>Details</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% set Count =  data['countSrNo'] %}
-                                    {% for playerlog_list_val in data.playerlog_list %}
+                                    {% for filecount_list_val in data.filecount_list %}
                                     <tr>
 
                                         <td class="center">
                                             {{ Count }}
                                         </td>
                                         <td>
-                                           {{ playerlog_list_val['location_id'] }}
+                                           {{ filecount_list_val['location_id'] }}
                                         </td>
-                                        <td>{{ playerlog_list_val['title'] }}</td>
-                                        <td class="hidden-480">{{ playerlog_list_val['datetime'] }}</td>
-                                        <td>{{ playerlog_list_val['artist_name'] }}</td>
-                                        <td class="hidden-480">
-                                            {{ playerlog_list_val['playlist_name'] }}
-                                        </td>
-                                        <td class="hidden-480">
-                                            {{ playerlog_list_val['category_name'] }}
+                                        <td>{{ filecount_list_val['network_id'] }}</td>
+                                        <td class="hidden-480">{{ filecount_list_val['status'] }}</td>
+                                        <td>{{ filecount_list_val['download_count'] }} / {{ filecount_list_val['total_count'] }}</td>
+                                        <td>{{ filecount_list_val['player_version'] }}</td>
+                                        <td class="hidden-480">{{ filecount_list_val['update_date'] }}
                                         </td>
                                         <td>
                                             <div class="hidden-sm hidden-xs btn-group">
@@ -947,7 +934,7 @@ $(document).ready(function(){
                         itemsOnPage: '{{ data['limit'] }}',
                         cssStyle: 'light-theme',
                         currentPage : '{{ data['current_page'] }}',
-                        hrefTextPrefix : '{{ path('playerlog_listing', {'page': ''}) }}'
+                        hrefTextPrefix : '{{ data['url'] }}'
                     });
 
                   //  setTimeout(getpag(), 3000);
@@ -956,6 +943,5 @@ $(document).ready(function(){
                     }
                  
                 });
-               
                 </script>
 {% endblock %}

@@ -73,7 +73,7 @@
                             <img class="nav-user-photo" src="{{ asset('assets/images/avatars/user.jpg') }}" alt="Jason's Photo" />
                             <span class="user-info">
                             <small>Welcome,</small>
-                            Jason
+                            Admin
                             </span>
                             <i class="ace-icon fa fa-caret-down"></i>
                             </a>
@@ -169,7 +169,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="">
+                    <li {% if data['main_menu'] == 'filecount' %} class="active open" {% endif %}>
                         <a href="#" class="dropdown-toggle">
                         <i class="menu-icon fa fa-list"></i>
                         <span class="menu-text"> Device Files </span>
@@ -177,15 +177,39 @@
                         </a>
                         <b class="arrow"></b>
                         <ul class="submenu">
-                            <li class="">
-                                <a href="tables.html">
+                            <li {% if data['sub_menu'] == 'filecount_listing' %} class="active" {% endif %} >
+                                <a href="{{ path('filecount_listing') }}">
                                 <i class="menu-icon fa fa-caret-right"></i>
                                Listing
                                 </a>
                                 <b class="arrow"></b>
                             </li>
-                            <li class="">
-                                <a href="jqgrid.html">
+                            <li {% if data['sub_menu'] == 'filecount_upload' %} class="active" {% endif %} >
+                                <a href="{{ path('filecount_upload') }}">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                                Upload
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </ul>
+                    </li>
+                    <li {% if data['main_menu'] == 'playlist' %} class="active open" {% endif %}>
+                        <a href="#" class="dropdown-toggle">
+                        <i class="menu-icon fa fa-list"></i>
+                        <span class="menu-text"> Playlist </span>
+                        <b class="arrow fa fa-angle-down"></b>
+                        </a>
+                        <b class="arrow"></b>
+                        <ul class="submenu">
+                            <li {% if data['sub_menu'] == 'playlist_listing' %} class="active" {% endif %} >
+                                <a href="{{ path('playlist_listing') }}">
+                                <i class="menu-icon fa fa-caret-right"></i>
+                               Listing
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                            <li {% if data['sub_menu'] == 'playlist_upload' %} class="active" {% endif %} >
+                                <a href="{{ path('playlist_upload') }}">
                                 <i class="menu-icon fa fa-caret-right"></i>
                                 Upload
                                 </a>

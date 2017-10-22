@@ -47,6 +47,7 @@ if(isset($_FILES['file']['tmp_name'])){
 	
 	$fileTypeTemp = explode('.',$_FILES['file']['name']);
 	$fileNameTemp = explode('_',$fileTypeTemp[0]);
+	//prx(strtolower($fileNameTemp[0]));
 	if(strtolower($fileNameTemp[0]) == 'playerlog'){
 	//INSERT INTO `playerlogs` (`location_id`, `datetime`, `title`, `artist_name`, `playlist_name`, `category_name`, `file_ref`, `creation_time`) VALUES ('123', '2017-10-19 09:38:50', 'title', 'name of artist', 'name of playlist', 'name of category', 'asd/asdasd/qwe.csv', CURRENT_TIMESTAMP);
 
@@ -102,11 +103,38 @@ if(isset($_FILES['file']['tmp_name'])){
                     $insert_qry_here    .=  ';';
 	}
 	
+	
+	if(strtolower($fileNameTemp[0]) == 'iaptv'){
+		$insert_qry_data = array();
+		$insert_qry_here = "INSERT INTO device_file_count (location_id, network_id, status, download_count, total_count, player_version) VALUES ";
+		//('982', 'SDASDASD', 'online', '39', '42', CURRENT_TIMESTAMP, '');
+		foreach($lines as $insert_qry_arr1_tempVal){
+			/*
+			    [PlayerStatus] => Offline
+    [TokenId] => 720
+    [PlayerNo] => 720
+    [PlayerName] => IAP TV Test 1
+    [Location] => IAP TV Test 1
+    [PlayerGroup] => 
+    [FileCount] => 42/41
+    [PlayerVersion] => 1.1
+			*/
+			//prx($insert_qry_arr1_tempVal);
+			$filecountTemp	=	explode('/',$insert_qry_arr1_tempVal['FileCount']);
+			if($insert_qry_arr1_tempVal['TokenId'] > 0){
+			$insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."', '".$insert_qry_arr1_tempVal['PlayerNo']."', '".$insert_qry_arr1_tempVal['PlayerStatus']."', '". (int) $filecountTemp[0] ."', '".(int) $filecountTemp[1]."','".$insert_qry_arr1_tempVal['PlayerVersion']."')";
+                        }
+			
+		}
+		$insert_qry_here    .=  implode(", ",$insert_qry_data);
+            $insert_qry_here    .=  ';';
+	}
+//	prx($lines);
 }
 //echo $insert_qry_here;
 //exit;
 //echo $insert_qry_here;
-//}
+//}111
 
 $servername = "localhost";
 $username = "root";
