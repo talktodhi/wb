@@ -203,7 +203,7 @@ class DoctorsController extends Controller
         if(isset($result['results'][0]['geometry'])){
             $lat = $result['results'][0]['geometry']['location']['lat'];
             $lng = $result['results'][0]['geometry']['location']['lng'];
-            $insert_qry = "INSERT INTO pincode (pincode,latitude,longitude,city) VALUES ('".$pincode."','".$lat."','".$lng."','".$city."')";
+            $insert_qry = "INSERT INTO datapincode (pincode,latitude,longitude,city) VALUES ('".$pincode."','".$lat."','".$lng."','".$city."')";
             $em = $this->getDoctrine()->getManager();
                  $conn = $em->getConnection();
                  $conn->prepare($insert_qry)
@@ -215,5 +215,46 @@ class DoctorsController extends Controller
         
         //$insert_qry = "INSERT INTO pincode (pincode,latitude,longitude,city) VALUES ('".$pincode."','".$lat."','".$lng."','".$city."')";
     }
+    
+    
+    private function fromCSVFile( $file) {
+        // open the CVS file
+        $handle = @fopen( $file, "r");
+        if ( !$handle ) {
+            throw new \Exception( "Couldn't open $file!" );
+        }
+
+        $result = [];
+
+        // read the first line
+        $first = fgets( $handle, 4096 );
+        // get the keys
+        $keys = str_getcsv( $first );
+        //prx($keys);
+        // read until the end of file
+        while ( ($buffer = fgets( $handle, 4096 )) !== false ) {
+
+            // read the next entry
+            $array = str_getcsv ( $buffer );
+            if ( empty( $array ) ) continue;
+
+            $row = [];
+            $i=0;
+
+            // replace numeric indexes with keys for each entry
+            if(count($keys) == count($array)){
+                foreach ( $keys as $key ) {
+                    $row[ $key ] = $array[ $i ];
+                    $i++;
+                }
+            }
+            // add relational array to final result
+            $result[] = $row;
+        }
+
+        fclose( $handle );
+        return $result;
+    }
+    
     
 }

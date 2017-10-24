@@ -28,14 +28,15 @@ class PlaylistController extends Controller
         if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };  
         $start_from = ($page-1) * $limit;  
 
-        $sql_data = "SELECT * FROM device_file_count";
+        $sql_data = "SELECT * FROM playlist_data";
         $where = array();
-        if(isset($_GET['location_id'])){
-            $_GET['location_id'] = array_filter($_GET['location_id']);
+        if(isset($_GET['playlist_id'])){
+            $_GET['playlist_id'] = array_filter($_GET['playlist_id']);
         }
-        if(isset($_GET['location_id']) && (count($_GET['location_id']) > 0)){
-            $where[] .= "location_id IN (".implode(',',$_GET['location_id']).")";
+        if(isset($_GET['playlist_id']) && (count($_GET['playlist_id']) > 0)){
+            $where[] .= "playlist_id IN (".implode(',',$_GET['playlist_id']).")";
         }
+        
         /*
         if(isset($_GET['doctor_name']) > 0){
             $doctorNameTemp = array();
@@ -61,18 +62,19 @@ class PlaylistController extends Controller
             }
         }
         */
+        
         $whereQry = '';
         if(count($where) >0){
             $whereQry .= " where ".implode(" OR ", $where);
         }
         $sql_data .= $whereQry;
         $sql_data .= " LIMIT ".$start_from.",".$limit;
-        
+        //prx($sql_data);
         $em = $this->getDoctrine()->getManager();
         $dataSet = $em->getConnection()
                     ->fetchAll($sql_data);
         
-        $sql_data_count = 'SELECT * FROM device_file_count ';
+        $sql_data_count = 'SELECT * FROM playlist_data ';
         $sql_data_count .= $whereQry;
         $data_connection2 = $this->getDoctrine()->getManager();
         $allDoctorData = $data_connection2->getConnection()
@@ -80,20 +82,20 @@ class PlaylistController extends Controller
         $dataCount['count'] =   count($allDoctorData);
         $data['total_records']          =   $dataCount['count'];
         
-        $sql_alldata_count = 'SELECT * FROM device_file_count ';
+        $sql_alldata_count = 'SELECT * FROM playlist_data ';
         $data_connection2 = $this->getDoctrine()->getManager();
         $allDoctorData = $data_connection2->getConnection()
                     ->fetchAll($sql_alldata_count);
-        $options['location_id'] = array();
+        $options['playlist_id'] = array();
         foreach($allDoctorData as $allDoctorDataVal){
-            $options['location_id'][$allDoctorDataVal['location_id']] = $allDoctorDataVal['location_id'];
+            $options['playlist_id'][$allDoctorDataVal['playlist_id']] = $allDoctorDataVal['playlist_name'];
           //  $options['doctor_name'][$allDoctorDataVal['name']] = $allDoctorDataVal['name'];
           //  $options['city'][$allDoctorDataVal['city']] = $allDoctorDataVal['city'];
         }
         
         $data['options']    =   $options;
 
-        $data['filecount_list']   =   $dataSet;
+        $data['playlist_list']   =   $dataSet;
         if(isset($_GET)){
             $data['get']    = $_GET;
         }
@@ -115,15 +117,15 @@ class PlaylistController extends Controller
                     $params = $_GET;
                 }
                 $params['page'] = $i;
-                $rt = $router->generate('filecount_listing', $params);
+                $rt = $router->generate('playlist_listing', $params);
              $pagLink .= "<li><a href='".$rt."'>".$i."</a></li>";  
         }; 
         $pagLink .= "</ul></nav>";
         $data['paginations'] = $pagLink;
         unset($params['page']);
         $params['page'] =   '';
-        $data['url'] =  $router->generate('filecount_listing', $params);;
-        return $this->render('default/filecount_listing.html.twig',array('data'=>$data));
+        $data['url'] =  $router->generate('playlist_listing', $params);;
+        return $this->render('default/playlist_listing.html.twig',array('data'=>$data));
     }
     
     /**
@@ -148,7 +150,7 @@ class PlaylistController extends Controller
         $data['sub_menu']   =   'playlist_upload';
         
         //$utilityClass = new UtilityClass();
-        $playlistName = 'ASASDAS';
+        $playlistName = $_POST['playlist_name'];
         if(!empty($_FILES)){
             $filename = basename($_FILES['playlistfile']['name']);
             $ext = substr($filename, strrpos($filename, '.') + 1);

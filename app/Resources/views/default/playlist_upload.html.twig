@@ -183,12 +183,12 @@ $(function(){
               processData: false,  // tell jQuery not to process the data
               contentType: false   // tell jQuery not to set contentType
             }).done(function( dataArr ) {
-                data = $.parseJSON(dataArr);
-                if(data.hasOwnProperty('error')){
-                    alert(data['error']);
+                if(dataArr['error']){
+                    alert(dataArr['error']);
                 }
-                if(data.hasOwnProperty('sucess')){
-                    alert(data['sucess']);
+                if(dataArr['sucess']){
+                    alert(dataArr['sucess']);
+                    window.location = "{{ path('playlist_upload') }}";
                 }
             });
             return false;
