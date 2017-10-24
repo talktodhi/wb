@@ -145,7 +145,7 @@ class PlayerlogController extends Controller
             }
             if(move_uploaded_file($_FILES['file']['tmp_name'],$uploaded_file)){
                 
-                $lines = assoc_getcsv($uploaded_file);
+                $lines = $this->fromCSVFile($uploaded_file);
                 
                 $insert_qry_here = 'INSERT INTO playerlogs (location_id, datetime, title, artist_name, playlist_name, category_name) VALUES ';
                 $previousData = array();
@@ -190,6 +190,43 @@ class PlayerlogController extends Controller
         exit;
     }
     
-    
+    private function fromCSVFile( $file) {
+        // open the CVS file
+        $handle = @fopen( $file, "r");
+        if ( !$handle ) {
+            throw new \Exception( "Couldn't open $file!" );
+        }
+
+        $result = [];
+
+        // read the first line
+        $first = fgets( $handle, 4096 );
+        // get the keys
+        $keys = str_getcsv( $first );
+        //prx($keys);
+        // read until the end of file
+        while ( ($buffer = fgets( $handle, 4096 )) !== false ) {
+
+            // read the next entry
+            $array = str_getcsv ( $buffer );
+            if ( empty( $array ) ) continue;
+
+            $row = [];
+            $i=0;
+
+            // replace numeric indexes with keys for each entry
+            if(count($keys) == count($array)){
+                foreach ( $keys as $key ) {
+                    $row[ $key ] = $array[ $i ];
+                    $i++;
+                }
+            }
+            // add relational array to final result
+            $result[] = $row;
+        }
+
+        fclose( $handle );
+        return $result;
+    }
     
 }
