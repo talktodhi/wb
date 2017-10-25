@@ -164,12 +164,14 @@ class DoctorsController extends Controller
                     foreach($lines as $insert_qry_arr1_tempVal){
                         //prx($insert_qry_arr1_tempVal);
 			$formated_date = '';
-                        $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['Location-ID']."','".$insert_qry_arr1_tempVal['Network-ID']."','".$insert_qry_arr1_tempVal['Doctor Name']."','".$insert_qry_arr1_tempVal['Doctors Mobile Number']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 1']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 2']."','".$insert_qry_arr1_tempVal['Receptionst Name']."','".$insert_qry_arr1_tempVal['Receptionst Mobile Number']."','".$insert_qry_arr1_tempVal['City']."','".$insert_qry_arr1_tempVal['State']."','INDIA','".$insert_qry_arr1_tempVal['Pincode']."','".$insert_qry_arr1_tempVal['Address']."','09:30:00','13:30:00','15:00:00','21:00:00')";
+                        $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['Location-ID']."','".$insert_qry_arr1_tempVal['Network-ID']."','".$insert_qry_arr1_tempVal['Doctor Name']."','".$insert_qry_arr1_tempVal['Doctors Mobile Number']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 1']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 2']."','".$insert_qry_arr1_tempVal['Receptionst Name']."','".$insert_qry_arr1_tempVal['Receptionst Mobile Number']."','".$insert_qry_arr1_tempVal['City']."','".$insert_qry_arr1_tempVal['State']."','INDIA','".$insert_qry_arr1_tempVal['Pincode']."','".str_replace("'"," ",$insert_qry_arr1_tempVal['Address'])."','09:30:00','13:30:00','15:00:00','21:00:00')";
                         if((!in_array($insert_qry_arr1_tempVal['Pincode'], $pincode)) && ($insert_qry_arr1_tempVal['Pincode'] > 0)){
                             //$insert_qry_arr1_tempVal['Pincode']
+                            if($insert_qry_arr1_tempVal['Pincode'] != ''){
                             $retVal = $this->getcoordinates($insert_qry_arr1_tempVal['Pincode'], $insert_qry_arr1_tempVal['City']);
-                            if($retVal > 0){
-                                $pincode[] = $retVal;
+                                if($retVal > 0){
+                                    $pincode[] = $retVal;
+                                }
                             }
                         }
                     }
