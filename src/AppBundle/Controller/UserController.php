@@ -38,4 +38,14 @@ class UserController extends Controller
         }
         return new JsonResponse($return);  
     }
+    
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logoutAction(Request $request)
+    {
+        $session = $request->getSession();        
+        $session->remove('user');
+        return $this->redirect($this->generateUrl("homepage"));
+    }
 }

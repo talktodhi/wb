@@ -5,6 +5,9 @@ namespace AppBundle\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
+use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler;
 
 class DoctorsController extends Controller
 {
@@ -13,6 +16,14 @@ class DoctorsController extends Controller
      */
     public function indexAction(Request $request)
     {
+        
+        $session                        =   $request->getSession();
+        $user                           =   $session->get('user');
+        if($user['id'] < 1){
+            //$this->redirectToRoute('login');
+            return $this->redirect($this->generateUrl("logout"));
+        }
+        
         $data = array();
         $router = $this->get('router');
         
@@ -110,6 +121,13 @@ class DoctorsController extends Controller
      */
     public function uploadAction(Request $request)
     {
+        $session                        =   $request->getSession();
+        $user                           =   $session->get('user');
+        if($user['id'] < 1){
+            //$this->redirectToRoute('login');
+            return $this->redirect($this->generateUrl("logout"));
+        }
+        
         $data = array();
         $data['main_menu']  =   'doctors';
         $data['sub_menu']   =   'doctors_upload';
