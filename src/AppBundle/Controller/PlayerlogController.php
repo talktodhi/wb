@@ -39,8 +39,21 @@ class PlayerlogController extends Controller
             $_GET['location_id'] = array_filter($_GET['location_id']);
         }
         if(isset($_GET['location_id']) && (count($_GET['location_id']) > 0)){
-            $where[] .= "location_id IN (".implode(',',$_GET['location_id']).")";
+            $where[] = "location_id IN (".implode(',',$_GET['location_id']).")";
         }
+        
+        if(isset($_GET['from_date'])){
+        if($_GET['from_date'] != ''){
+            $from_date = date('Y-m-d H:i:s', strtotime($_GET['from_date']));
+            if(isset($_GET['to_date'])){
+                $to_date = date('Y-m-d H:i:s', strtotime($_GET['to_date']));
+            }else{
+                $to_date = date('Y-m-d H:i:s');
+            }
+            $where[] = " datetime BETWEEN '".$from_date."' AND '".$to_date."'";
+        }
+        }
+        /*
         if(isset($_GET['doctor_name']) > 0){
             $doctorNameTemp = array();
             foreach($_GET['doctor_name'] as $doctor_name_val){
@@ -64,12 +77,15 @@ class PlayerlogController extends Controller
                 $where[] .= "city IN (".implode(',',$cityTemp).")";
             }
         }
-        
+        */
         $whereQry = '';
         if(count($where) >0){
-            $whereQry .= " where ".implode(" OR ", $where);
+            $whereQry .= " where ".implode(" AND ", $where);
         }
         $sql_data .= $whereQry;
+        
+        // AND `datetime` BETWEEN '2017-01-01 00:00:00.000000' AND '2017-11-30 00:00:00.000000'
+        
         $sql_data .= " LIMIT ".$start_from.",".$limit;
         //prx($sql_data);
         $em = $this->getDoctrine()->getManager();
@@ -108,11 +124,20 @@ class PlayerlogController extends Controller
         $total_pages = ceil($total_records / $limit);  
         $pagLink = "<nav><ul class='pagination'>";  
         for ($i=1; $i<=$total_pages; $i++) {
-                $rt = $router->generate('playerlog_listing', array('page' => $i));
+            if(isset($_GET)){
+                    $params = $_GET;
+                }
+                $params['page'] = $i;
+                
+                $rt = $router->generate('playerlog_listing', $params);
              $pagLink .= "<li><a href='".$rt."'>".$i."</a></li>";  
         }; 
         $pagLink .= "</ul></nav>";
         $data['paginations'] = $pagLink;
+        unset($params['page']);
+        $params['page'] =   '';
+        $data['url'] =  $router->generate('playerlog_listing', $params);;
+        
         return $this->render('default/playerlog_listing.html.twig',array('data'=>$data));
     }
     
