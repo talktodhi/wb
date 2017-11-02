@@ -50,6 +50,21 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group">
+                        <label for="date-timepicker1">Date/Time Picker</label>
+
+                        <div class="input-group">
+                                <input id="date-timepicker1" type="text" class="form-control" />
+                                <span class="input-group-addon">
+                                        <i class="fa fa-clock-o bigger-110"></i>
+                                </span>
+                                </div>   TO </div>
+                                <input id="date-timepicker2" type="text" class="form-control" />
+                                <span class="input-group-addon">
+                                        <i class="fa fa-clock-o bigger-110"></i>
+                                </span>
+                        </div>
+                        </div>
                                 {#
                         <div class="form-group">
                             <label class="col-sm-3 control-label no-padding-right" for="form-field-1">Doctor Name :</label>
@@ -955,6 +970,40 @@ $(document).ready(function(){
                         $('.search-choice-close')[0].click();
                     }
                  
+                                if(!ace.vars['old_ie']) $('#date-timepicker1').datetimepicker({
+				 //format: 'MM/DD/YYYY h:mm:ss A',//use this option to display seconds
+				 icons: {
+					time: 'fa fa-clock-o',
+					date: 'fa fa-calendar',
+					up: 'fa fa-chevron-up',
+					down: 'fa fa-chevron-down',
+					previous: 'fa fa-chevron-left',
+					next: 'fa fa-chevron-right',
+					today: 'fa fa-arrows ',
+					clear: 'fa fa-trash',
+					close: 'fa fa-times'
+				 }
+				}).next().on(ace.click_event, function(){
+					$(this).prev().focus();
+				});
+                                
+                                if(!ace.vars['old_ie']) $('#date-timepicker2').datetimepicker({
+				 //format: 'MM/DD/YYYY h:mm:ss A',//use this option to display seconds
+				 icons: {
+					time: 'fa fa-clock-o',
+					date: 'fa fa-calendar',
+					up: 'fa fa-chevron-up',
+					down: 'fa fa-chevron-down',
+					previous: 'fa fa-chevron-left',
+					next: 'fa fa-chevron-right',
+					today: 'fa fa-arrows ',
+					clear: 'fa fa-trash',
+					close: 'fa fa-times'
+				 }
+				}).next().on(ace.click_event, function(){
+					$(this).prev().focus();
+				});
+                                
                 });
                
                 </script>
