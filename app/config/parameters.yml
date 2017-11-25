@@ -1,10 +1,10 @@
 # This file is auto-generated during the composer install
 parameters:
-    database_host: wbdbdevinst.csdd7y1tpw4r.us-east-1.rds.amazonaws.com
+    database_host: localhost
     database_port: null
-    database_name: wbdbdev
-    database_user: wbdbdevinst
-    database_password: wbdbdevinst
+    database_name: wbcms
+    database_user: root
+    database_password: 
     mailer_transport: smtp
     mailer_host: 127.0.0.1
     mailer_user: null

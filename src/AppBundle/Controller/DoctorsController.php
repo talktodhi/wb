@@ -176,33 +176,40 @@ class DoctorsController extends Controller
                 $insert_qry_here    .=  implode(", ",$insert_qry_data);
                 $insert_qry_here    .=  ';';
                 */
-                   // prx($lines);
+                    //prx($lines);
                 
                     $insert_qry_here = 'INSERT INTO doctors (location_id, network_id, name, mobile, ll_num1, ll_num2, receptionist_name, receptioist_mobile, city, state, country, pincode, address, morning_time_from, morning_time_to, evening_time_from, evening_time_to) VALUES ';
                     foreach($lines as $insert_qry_arr1_tempVal){
                         //prx($insert_qry_arr1_tempVal);
 			$formated_date = '';
-                        $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['Location-ID']."','".$insert_qry_arr1_tempVal['Network-ID']."','".$insert_qry_arr1_tempVal['Doctor Name']."','".$insert_qry_arr1_tempVal['Doctors Mobile Number']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 1']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 2']."','".$insert_qry_arr1_tempVal['Receptionst Name']."','".$insert_qry_arr1_tempVal['Receptionst Mobile Number']."','".$insert_qry_arr1_tempVal['City']."','".$insert_qry_arr1_tempVal['State']."','INDIA','".$insert_qry_arr1_tempVal['Pincode']."','".str_replace("'"," ",$insert_qry_arr1_tempVal['Address'])."','09:30:00','13:30:00','15:00:00','21:00:00')";
-                        if((!in_array($insert_qry_arr1_tempVal['Pincode'], $pincode)) && ($insert_qry_arr1_tempVal['Pincode'] > 0)){
-                            //$insert_qry_arr1_tempVal['Pincode']
-                            if($insert_qry_arr1_tempVal['Pincode'] != ''){
-                            $retVal = $this->getcoordinates($insert_qry_arr1_tempVal['Pincode'], $insert_qry_arr1_tempVal['City']);
-                                if($retVal > 0){
-                                    $pincode[] = $retVal;
+                        //if(isset($insert_qry_arr1_tempVal['Location-ID']) && ($insert_qry_arr1_tempVal['Network-ID']) && ($insert_qry_arr1_tempVal['Doctor Name'])&& ($insert_qry_arr1_tempVal['Doctors Mobile Number'])&& ($insert_qry_arr1_tempVal['Landline Number of clinic 1'])&& ($insert_qry_arr1_tempVal['Landline Number of clinic 2'])&& ($insert_qry_arr1_tempVal['Receptionst Name'])&& ($insert_qry_arr1_tempVal['Receptionst Mobile Number'])&& ($insert_qry_arr1_tempVal['City'])&& ($insert_qry_arr1_tempVal['State'])&& ($insert_qry_arr1_tempVal['Pincode'])&& ($insert_qry_arr1_tempVal['Address'])){
+                        if((array_key_exists('Location-ID',$insert_qry_arr1_tempVal)) && (array_key_exists('Network-ID', $insert_qry_arr1_tempVal)) && (array_key_exists('Doctor Name', $insert_qry_arr1_tempVal)) && (array_key_exists('Doctors Mobile Number', $insert_qry_arr1_tempVal)) && (array_key_exists('Landline Number of clinic 1', $insert_qry_arr1_tempVal)) && (array_key_exists('Landline Number of clinic 2', $insert_qry_arr1_tempVal)) && (array_key_exists('Receptionst Name', $insert_qry_arr1_tempVal)) && (array_key_exists('Receptionst Mobile Number', $insert_qry_arr1_tempVal)) && (array_key_exists('City', $insert_qry_arr1_tempVal)) && (array_key_exists('State', $insert_qry_arr1_tempVal)) && (array_key_exists('Pincode', $insert_qry_arr1_tempVal)) && (array_key_exists('Address', $insert_qry_arr1_tempVal)) ){
+                        //$thisArrKey = array_keys($insert_qry_arr1_tempVal);
+                            if(($insert_qry_arr1_tempVal['Location-ID'] > 0) && ($insert_qry_arr1_tempVal['Pincode'] > 0) && (trim($insert_qry_arr1_tempVal['City']) != '') && (trim($insert_qry_arr1_tempVal['State']) != '')){
+                                $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['Location-ID']."','".$insert_qry_arr1_tempVal['Network-ID']."','".htmlspecialchars($insert_qry_arr1_tempVal['Doctor Name'], ENT_QUOTES)."','".$insert_qry_arr1_tempVal['Doctors Mobile Number']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 1']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 2']."','".htmlspecialchars($insert_qry_arr1_tempVal['Receptionst Name'], ENT_QUOTES)."','".$insert_qry_arr1_tempVal['Receptionst Mobile Number']."','".$insert_qry_arr1_tempVal['City']."','".$insert_qry_arr1_tempVal['State']."','INDIA','".$insert_qry_arr1_tempVal['Pincode']."','".str_replace("'"," ",$insert_qry_arr1_tempVal['Address'])."','09:30:00','13:30:00','15:00:00','21:00:00')";
+                                if((!in_array($insert_qry_arr1_tempVal['Pincode'], $pincode)) && ($insert_qry_arr1_tempVal['Pincode'] > 0)){
+                                    //$insert_qry_arr1_tempVal['Pincode']
+                                    if($insert_qry_arr1_tempVal['Pincode'] != ''){
+                                    $retVal = $this->getcoordinates($insert_qry_arr1_tempVal['Pincode'], $insert_qry_arr1_tempVal['City']);
+                                        if($retVal > 0){
+                                            $pincode[] = $retVal;
+                                        }
+                                    }
                                 }
                             }
                         }
                     }
-                    
-                    $insert_qry_here    .=  implode(", ",$insert_qry_data);
-                    
-                    $insert_qry_here    .= '  ON DUPLICATE KEY UPDATE network_id=VALUES(network_id), name=VALUES(name), mobile=VALUES(mobile), ll_num1=VALUES(ll_num1), ll_num2=VALUES(ll_num2), receptionist_name=VALUES(receptionist_name), receptioist_mobile=VALUES(receptioist_mobile), city=VALUES(city), state=VALUES(state), country=VALUES(country), pincode=VALUES(pincode), address=VALUES(address), morning_time_from=VALUES(morning_time_from), morning_time_to=VALUES(morning_time_to), evening_time_from=VALUES(evening_time_from), evening_time_to=VALUES(evening_time_to)';
-                    $insert_qry_here    .=  ';';
+                    //prx($insert_qry_data);
+                    if(count($insert_qry_data) > 0){
+                        $insert_qry_here    .=  implode(", ",$insert_qry_data);
+
+                        $insert_qry_here    .= '  ON DUPLICATE KEY UPDATE network_id=VALUES(network_id), name=VALUES(name), mobile=VALUES(mobile), ll_num1=VALUES(ll_num1), ll_num2=VALUES(ll_num2), receptionist_name=VALUES(receptionist_name), receptioist_mobile=VALUES(receptioist_mobile), city=VALUES(city), state=VALUES(state), country=VALUES(country), pincode=VALUES(pincode), address=VALUES(address), morning_time_from=VALUES(morning_time_from), morning_time_to=VALUES(morning_time_to), evening_time_from=VALUES(evening_time_from), evening_time_to=VALUES(evening_time_to)';
+                        $insert_qry_here    .=  ';';
                 
-                 $em = $this->getDoctrine()->getManager();
-                 $conn = $em->getConnection();
-                 $conn->prepare($insert_qry_here)
-                 ->execute();
+                        $em = $this->getDoctrine()->getManager();
+                        $conn = $em->getConnection();
+                        $conn->prepare($insert_qry_here)->execute();
+                    }
             }
         }
         exit;
