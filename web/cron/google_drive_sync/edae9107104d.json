@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "savvy-cinema-185813",
+  "private_key_id": "edae9107104d169410045741ec3e4165c794bb80",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCvWNUnU8ZMQKn5\nASwVTrtSlSj48RfwCpX8RqIjHFMPryiGDhp53vtIsbSdOOp5LUUNzqrbFRzF+BSt\n9+E6QrUJGVnvky5A7bgVk/PFASl/b2egCcBRY4cI/BmcoMP1jN/fIcki76SxmpeD\nlKq+MgImF5GdeYblU+MYVcaAiV987l6mZQ+ojQnzPXh1+1dXtxXomLdO2qjyOwrl\naQ4/gjgQWmJWk5LO1cucCbgrc3Epq/zPbHOyzxNzM9o1KUd5X6QhtBnPEJw5rG1d\nJeOS1Mu4Av+hZQJT5IIL4EX8lZFToSX6Z+qoOsqPZzuztUQQepjaoN5QzbrpY+8o\nHwNu1DBpAgMBAAECggEAEKa3ayol8RTM71QAqy9UU5XNk8JVWxquPow4lmv4qUsh\nZoWNVxhpNXCGrc17WrGFVrfS+sYI+vXBhPm+nik6htgs9ba81Dae3hG0OveOyMa8\nCPMUG8Z/Sseh6QFNSpKrqcVME/C86466J6klA7W9BYAEeHdTa5CpRqTSml8xPaw+\n3sLG9koIXQ8DByCBoYcxtaflKhP6kNjLFxmGk4UdFC975b+hVBpSZKIG1rRnWbLS\nYcH7APCRJX/bo+NthTsaElP2vD75Al9Axpzfx0ez4HDPBFDb26DIWlddDpCq5tR3\nzRpSW2sjCzxDT/jjBuxWh8c7RNrVAYPEogYthRdUOQKBgQDkkGKnepAsvb13vXEy\n2yCtOFaV2oqH0MWVwIGmtyrQU7cvehWfviPXlLkPn56C9GXiyUQfHJFfm+fP8yOk\nJC6OddWnQUP15aqnQPz1Cpzs/2HTeHM96SPK3Yj1n9TuJzg34/CUWL70GydiS4OB\nPJyNkNP4IpBUh2OPwhT5nGPZTQKBgQDEZSAYyZl03if+ABIp1S18YKNrw8dfRXpQ\nZRwm7dp0lD2s8EwM3hKzl+fj5MZjIOJ4hu85oGX4NCMgS7oZMmhWFzpxJY5nIasO\nc0wGHcii2Bw/l0BeMtMlATpxFnHN/pdtVYps155KEU78GB445CQ964JxpK6mELAi\nSAoZJ3MFjQKBgEKS77lakL4HcjV7X4pxmx35R/cUFb+jhrmsvdbiiTzu9W+FvuCt\nkGENt62eT5xTNY4OE6KAPrO7hJTkfCAmTc0+80FpWDM6dy+KVWPGeJjrdgITlnWU\n/9DqICdzK6FGmTBmWz/KbaxKcHlIB4DQN8VgRu2Cm8mTOeO4o0VlUQwNAoGBALIy\n87mqCuSgwvbUh6aPeHM3mHCqttd6Si5yX+Xuwd4vt/qYGtk+EwgD2HPO3DeL2hH0\nlVHbeUqJvCmMrLI6K7OZ5fxOUHTBdt1ovl16Xtdrcc49ZjlSsoUMJUQBUofP7wRU\nroJt7oFUTS+ujpWeZEgOzlBhVdr2n2qrpQYH5nTtAoGBALYl9HzI81zE5endbzQJ\n28P0Ig0qWuq1cApclHzvUpnoWtWior29RpGfNexclOKEci6KFVAq0YVn8TdXr112\nO3xAZP2pRs4vRqOexnKj3eT5tgth55IVR2nLNHEafOfIbezaV7R/7MhqywD6Worr\nSt6UBEn/QQM52HKPxvN9UgHm\n-----END PRIVATE KEY-----\n",
+  "client_email": "wbdev-756@savvy-cinema-185813.iam.gserviceaccount.com",
+  "client_id": "112959986084859849702",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/wbdev-756%40savvy-cinema-185813.iam.gserviceaccount.com"
+}

@@ -22,7 +22,7 @@ class PlayerlogController extends Controller
             //$this->redirectToRoute('login');
             return $this->redirect($this->generateUrl("logout"));
         }
-        
+        $params = array();
         $data = array();
         $router = $this->get('router');
         
@@ -206,7 +206,7 @@ class PlayerlogController extends Controller
                     $date = new \DateTime($insert_qry_arr1_tempVal['DateTime']);
                     $formated_date = $date->format('Y-m-d H:i:s');
                     if(!isset($previousData[$insert_qry_arr1_tempVal['TokenId']][$just_date][$formated_date])){
-                        $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."','".$formated_date."','".$insert_qry_arr1_tempVal['Title']."','".$insert_qry_arr1_tempVal['ArtistName']."','".$insert_qry_arr1_tempVal['PlaylistName']."','".$insert_qry_arr1_tempVal['CategoryName']."')";
+                        $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."','".$formated_date."','".$insert_qry_arr1_tempVal['Title']."','".$insert_qry_arr1_tempVal['ArtistName']."','".$insert_qry_arr1_tempVal['Playlistname']."','".$insert_qry_arr1_tempVal['CategoryName']."')";
                     }
                 }
                //     prx($insert_qry_data);

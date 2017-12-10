@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DoctorsController extends Controller
 {
@@ -283,5 +285,101 @@ class DoctorsController extends Controller
         return $result;
     }
     
+    /**
+     * @Route("/doctors_getlocationdata", name="doctors_getlocationdata")
+     */    
+    public function getlocationdataAction(Request $request){
+        $location_id = $request->get('location_id');
+            $data_connection2 = $this->getDoctrine()->getManager();
+            $sql_data_count = 'SELECT count(*) as total FROM doctors WHERE location_id = "'.$location_id.'"';
+            $doctorDataCount = $data_connection2->getConnection()
+                    ->fetchColumn($sql_data_count);
+            if($doctorDataCount > 0){
+                $sql_data = 'SELECT * FROM doctors WHERE location_id = "'.$location_id.'"';
+                $doctorData = $data_connection2->getConnection()
+                        ->fetchAssoc($sql_data);
+            }else{
+                $doctorData = array();
+            }
+           // prx($doctorData);
+            return $this->render('default/locationData.html.twig',array('data' => $doctorData));
+    }
     
+    //doctors_updatelocationdata
+    /**
+     * @Route("/doctors_updatelocationdata", name="doctors_updatelocationdata")
+     */    
+    public function updatelocationdataAction(Request $request){
+       //$location_id = $request->get('location_id');
+            
+            $data = $_POST;
+            $sql_data_count = 'SELECT * FROM datapincode ';
+            $data_connection2 = $this->getDoctrine()->getManager();
+            $allPincode = $data_connection2->getConnection()
+                    ->fetchAll($sql_data_count);
+            $pincode    =   array();
+            foreach($allPincode as $allPincodeVal){
+                $pincode[] = $allPincodeVal['pincode'];
+            }
+            
+       // $insert_qry_here = 'INSERT INTO doctors (network_id, name, mobile, ll_num1, ll_num2, receptionist_name, receptioist_mobile, city, state, country, pincode, address, morning_time_from, morning_time_to, evening_time_from, evening_time_to) VALUES ';
+       // $insert_qry_data .= " ('".$insert_qry_arr1_tempVal['Network-ID']."','".htmlspecialchars($insert_qry_arr1_tempVal['Doctor Name'], ENT_QUOTES)."','".$insert_qry_arr1_tempVal['Doctors Mobile Number']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 1']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 2']."','".htmlspecialchars($insert_qry_arr1_tempVal['Receptionst Name'], ENT_QUOTES)."','".$insert_qry_arr1_tempVal['Receptionst Mobile Number']."','".$insert_qry_arr1_tempVal['City']."','".$insert_qry_arr1_tempVal['State']."','INDIA','".$insert_qry_arr1_tempVal['Pincode']."','".str_replace("'"," ",$insert_qry_arr1_tempVal['Address'])."','09:30:00','13:30:00','15:00:00','21:00:00')";
+        $update_qry = "UPDATE doctors set network_id = '".$data['network_id']."', name = '".$data['doctor_name']."', mobile = '".$data['doctor_mobile']."', ll_num1= '".$data['ll_num1']."', ll_num2= '".$data['ll_num2']."', receptionist_name= '".$data['receptionist_name']."', receptioist_mobile= '".$data['receptionist_mobile']."', city= '".$data['city']."', state= '".$data['state']."', country= 'India', pincode= '".$data['pincode']."', address= '".$data['address']."', morning_time_from= '".$data['mornfrom']."', morning_time_to= '".$data['mornto']."', evening_time_from= '".$data['evenfrom']."', evening_time_to= '".$data['evento']."' where location_id= '".$data['location_id']."'";
+        $em = $this->getDoctrine()->getManager();
+        $conn = $em->getConnection();
+        $conn->prepare($update_qry)->execute();
+        
+        if((!in_array($data['pincode'], $pincode)) && ($data['pincode'] > 0)){
+            if($data['pincode'] != ''){
+            $retVal = $this->getcoordinates($data['pincode'], $data['city']);
+                if($retVal > 0){
+                    $pincode[] = $retVal;
+                }
+            }
+        }
+        return new Response('1');
+    }
+    //doctors_addlocationdata
+    //doctors_updatelocationdata
+    /**
+     * @Route("/doctors_addlocationdata", name="doctors_addlocationdata")
+     */
+    public function addlocationdataAction(Request $request){
+       //$location_id = $request->get('location_id');
+            
+            $data = $_POST;
+            $sql_data_count = "SELECT count(*) as count FROM doctors  where location_id= '".$data['location_id']."'";
+            $data_connection2 = $this->getDoctrine()->getManager();
+            $countDoctor = $data_connection2->getConnection()
+                    ->fetchColumn($sql_data_count);
+            if($countDoctor > 0){
+                $return['error'] = 1;
+                $return['msg'] = "This location ID is assigned to some other doctor.";
+            }else{
+                $update_qry = "INSERT INTO doctors set location_id= '".$data['location_id']."', network_id = '".$data['network_id']."', name = '".$data['doctor_name']."', mobile = '".$data['doctor_mobile']."', ll_num1= '".$data['ll_num1']."', ll_num2= '".$data['ll_num2']."', receptionist_name= '".$data['receptionist_name']."', receptioist_mobile= '".$data['receptionist_mobile']."', city= '".$data['city']."', state= '".$data['state']."', country= 'India', pincode= '".$data['pincode']."', address= '".$data['address']."', morning_time_from= '".$data['mornfrom']."', morning_time_to= '".$data['mornto']."', evening_time_from= '".$data['evenfrom']."', evening_time_to= '".$data['evento']."'";
+                $em = $this->getDoctrine()->getManager();
+                $conn = $em->getConnection();
+                $conn->prepare($update_qry)->execute();
+                $return['error'] = 0;
+            }
+            /*
+       // $insert_qry_here = 'INSERT INTO doctors (network_id, name, mobile, ll_num1, ll_num2, receptionist_name, receptioist_mobile, city, state, country, pincode, address, morning_time_from, morning_time_to, evening_time_from, evening_time_to) VALUES ';
+       // $insert_qry_data .= " ('".$insert_qry_arr1_tempVal['Network-ID']."','".htmlspecialchars($insert_qry_arr1_tempVal['Doctor Name'], ENT_QUOTES)."','".$insert_qry_arr1_tempVal['Doctors Mobile Number']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 1']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 2']."','".htmlspecialchars($insert_qry_arr1_tempVal['Receptionst Name'], ENT_QUOTES)."','".$insert_qry_arr1_tempVal['Receptionst Mobile Number']."','".$insert_qry_arr1_tempVal['City']."','".$insert_qry_arr1_tempVal['State']."','INDIA','".$insert_qry_arr1_tempVal['Pincode']."','".str_replace("'"," ",$insert_qry_arr1_tempVal['Address'])."','09:30:00','13:30:00','15:00:00','21:00:00')";
+        $update_qry = "UPDATE doctors set network_id = '".$data['network_id']."', name = '".$data['doctor_name']."', mobile = '".$data['doctor_mobile']."', ll_num1= '".$data['ll_num1']."', ll_num2= '".$data['ll_num2']."', receptionist_name= '".$data['receptionist_name']."', receptioist_mobile= '".$data['receptionist_mobile']."', city= '".$data['city']."', state= '".$data['state']."', country= 'India', pincode= '".$data['pincode']."', address= '".$data['address']."', morning_time_from= '".$data['mornfrom']."', morning_time_to= '".$data['mornto']."', evening_time_from= '".$data['evenfrom']."', evening_time_to= '".$data['evento']."' where location_id= '".$data['location_id']."'";
+        $em = $this->getDoctrine()->getManager();
+        $conn = $em->getConnection();
+        $conn->prepare($update_qry)->execute();
+        
+        if((!in_array($data['pincode'], $pincode)) && ($data['pincode'] > 0)){
+            if($data['pincode'] != ''){
+            $retVal = $this->getcoordinates($data['pincode'], $data['city']);
+                if($retVal > 0){
+                    $pincode[] = $retVal;
+                }
+            }
+        }
+        return new Response('1');
+        */
+        return new JsonResponse($return);
+    }
 }
