@@ -264,4 +264,95 @@ class PlayerlogController extends Controller
         return $result;
     }
     
+    /**
+     * @Route("/daterangeanalytics", name="daterangeanalytics")
+     */
+    public function daterangeanalyticsAction(Request $request)
+    {
+        $session                        =   $request->getSession();
+        $user                           =   $session->get('user');
+        if($user['id'] < 1){
+            //$this->redirectToRoute('login');
+            return $this->redirect($this->generateUrl("logout"));
+        }
+        $data = array();
+        
+        $params = array();
+        $data = array();
+        $router = $this->get('router');
+        
+        $data['main_menu']  =   'analysis';
+        $data['sub_menu']   =   'daterange_analysis';
+        
+        if(isset($_POST['date-range-picker1'])){
+            $dataArr1 = array();
+            $dataArr2 = array();
+            
+            $dateRange_1 = $_POST['date-range-picker1'];
+            $dateRange_2 = $_POST['date-range-picker2'];
+            //pr($_POST);
+            $dateRange_1_temp = explode(' - ',$dateRange_1);
+            $dateRange_2_temp = explode(' - ',$dateRange_2);
+             
+            $dateRange_1_from      = $dateRange_1_temp[0];
+            $dateRange_1_to        = $dateRange_1_temp[1];
+             
+            $dateRange_2_from      = $dateRange_2_temp[0];
+            $dateRange_2_to        = $dateRange_2_temp[1];
+             //SELECT DISTINCT location_id FROM playerlogs WHERE datetime BETWEEN '2017-12-03' AND '2017-12-11' ORDER BY `id` ASC 
+            $sql_set1 = "SELECT DISTINCT location_id  FROM playerlogs WHERE datetime BETWEEN '".$dateRange_1_from."' AND '".$dateRange_1_to."' order by location_id";
+            $em = $this->getDoctrine()->getManager();
+            $dataSet1 = $em->getConnection()
+                ->fetchAll($sql_set1);
+            foreach($dataSet1 as $dataSet1Val){
+                $dataArr1[] =  $dataSet1Val['location_id'];
+            }
+            
+            $sql_set2 = "SELECT DISTINCT location_id  FROM playerlogs WHERE datetime BETWEEN '".$dateRange_2_from."' AND '".$dateRange_2_to."' order by location_id";
+            $em = $this->getDoctrine()->getManager();
+            $dataSet2 = $em->getConnection()
+                ->fetchAll($sql_set2);
+            foreach($dataSet2 as $dataSet1Val2){
+                $dataArr2[] =  $dataSet1Val2['location_id'];
+            }
+
+            foreach($dataArr1 as $dataArr1Val){
+                if(!in_array($dataArr1Val, $dataArr2)){
+                   $inactiveDevices[] =  $dataArr1Val;
+                }
+            }
+            
+            foreach($dataArr2 as $dataArr2Val){
+                if(!in_array($dataArr2Val, $dataArr1)){
+                   $newDevices[] =  $dataArr2Val;
+                }
+            }
+            
+            $sql_inactive = "SELECT *  FROM doctors WHERE location_id IN (".implode(',',$inactiveDevices).") order by state asc";
+            $em = $this->getDoctrine()->getManager();
+            $sql_inactiveData = $em->getConnection()
+                ->fetchAll($sql_inactive);
+            foreach($sql_inactiveData as $sql_inactiveDataVal){
+                $sql_inactiveDataArr[$sql_inactiveDataVal['location_id']] =  $sql_inactiveDataVal;
+            }
+            
+            $sql_newdevice = "SELECT *  FROM doctors WHERE location_id IN (".implode(',',$newDevices).") order by state asc";
+            $em = $this->getDoctrine()->getManager();
+            $sql_newDevicesData = $em->getConnection()
+                ->fetchAll($sql_newdevice);
+            foreach($sql_newDevicesData as $sql_newDevicesDataVal){
+                $sql_newdeviceDataArr[$sql_newDevicesDataVal['location_id']] =  $sql_newDevicesDataVal;
+            }
+            
+            $data['inactiveDeviceID']       =   $inactiveDevices;
+            $data['inactiveDeviceData']     =   $sql_inactiveDataArr;
+            
+            $data['newDeviceID']            =   $newDevices;
+            $data['newDeviceData']          =   $sql_newdeviceDataArr;
+        }
+        
+      
+        return $this->render('default/daterangeanalytics.html.twig',array('data'=>$data));
+    }
+       
 }
