@@ -28,7 +28,8 @@ class PlaylistController extends Controller
             return $this->redirect($this->generateUrl("logout"));
         }
         
-        $data = array();
+        $data       =   array();
+        $params     =   array();
         $router = $this->get('router');
         
         $data['main_menu']  =   'playlist';
@@ -201,18 +202,14 @@ class PlaylistController extends Controller
                         $stmt->execute();
 
                         $lastInsertedId = $conn->lastInsertId();
-                        $insert_qry_here = 'INSERT INTO playlist_data (playlist_id, sr_no, film, content_id, playlist_name, audio, sub_titles, genre, topic, video_type,brand, product, start_date, end_date) VALUES ';
+                        $insert_qry_here = 'INSERT INTO playlist_data (playlist_id, sr_no, film, content_id, playlist_name, group_zone, audio, sub_titles, genre, topic, video_type,brand, product, start_date, end_date) VALUES ';
 
                         foreach($data_arr as $insert_qry_arr1_tempVal){
-                            //prx($insert_qry_arr1_tempVal);
-                            //if($insert_qry_arr1_tempVal['TokenId'] > 0){
-                                $insert_qry_data[] = "('".$lastInsertedId."','".$insert_qry_arr1_tempVal['S.No.']."','".$insert_qry_arr1_tempVal['Film']."','".$insert_qry_arr1_tempVal['Content ID']."','".$insert_qry_arr1_tempVal['Group/Zone']."','".$insert_qry_arr1_tempVal['Audio']."','".$insert_qry_arr1_tempVal['Sub-Titles']."','".$insert_qry_arr1_tempVal['Genre']."','".$insert_qry_arr1_tempVal['Topic']."','".$insert_qry_arr1_tempVal['Live/Animation']."','".$insert_qry_arr1_tempVal['Brand']."','".$insert_qry_arr1_tempVal['Product']."','".date('Y-m-d', strtotime($insert_qry_arr1_tempVal['Start Date']))."','".date('Y-m-d', strtotime($insert_qry_arr1_tempVal['End Date']))."')";
-                           // }
+                                $insert_qry_data[] = "('".$lastInsertedId."','".$insert_qry_arr1_tempVal['S.No.']."','".$insert_qry_arr1_tempVal['Film']."','".$insert_qry_arr1_tempVal['Content ID']."','".$playlistName."','".$insert_qry_arr1_tempVal['Group/Zone']."','".$insert_qry_arr1_tempVal['Audio']."','".$insert_qry_arr1_tempVal['Sub-Titles']."','".$insert_qry_arr1_tempVal['Genre']."','".$insert_qry_arr1_tempVal['Topic']."','".$insert_qry_arr1_tempVal['Live/Animation']."','".$insert_qry_arr1_tempVal['Brand']."','".$insert_qry_arr1_tempVal['Product']."','".date('Y-m-d', strtotime($insert_qry_arr1_tempVal['Start Date']))."','".date('Y-m-d', strtotime($insert_qry_arr1_tempVal['End Date']))."')";
                         }
 
                         $insert_qry_here    .=  implode(", ",$insert_qry_data);
                         $insert_qry_here    .=  ';';
-                       // prx($insert_qry_here);
                         $em = $this->getDoctrine()->getManager();
                         $conn = $em->getConnection();
                         $conn->prepare($insert_qry_here)

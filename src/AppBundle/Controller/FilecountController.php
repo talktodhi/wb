@@ -28,6 +28,7 @@ class FilecountController extends Controller
         }
         
         $data = array();
+        $params     =   array();
         $router = $this->get('router');
         
         $data['main_menu']  =   'filecount';
@@ -177,7 +178,7 @@ class FilecountController extends Controller
             if(move_uploaded_file($_FILES['file']['tmp_name'],$uploaded_file)){
                 error_reporting(0);
                 $lines = $this->fromCSVFile($uploaded_file);
-                $insert_qry_here = 'INSERT INTO device_file_count (location_id, network_id, status, download_count, total_count, player_version) VALUES ';
+                $insert_qry_here = 'INSERT INTO device_file_count (location_id, network_id, status, download_count, total_count, player_version,token,CurrentPlaylist,CurrentPlaylistFileCount) VALUES ';
 	
                 foreach($lines as $insert_qry_arr1_tempVal){
                     
@@ -191,7 +192,7 @@ class FilecountController extends Controller
                     }
                     
                     if($insert_qry_arr1_tempVal['TokenId'] > 0){
-                        $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."','".$insert_qry_arr1_tempVal['PlayerNo']."','".$insert_qry_arr1_tempVal['PlayerStatus']."','".$downloadCnt."','".$totalCnt."','".$insert_qry_arr1_tempVal['PlayerVersion']."')";
+                        $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."','".$insert_qry_arr1_tempVal['PlayerNo']."','".$insert_qry_arr1_tempVal['PlayerStatus']."','".$downloadCnt."','".$totalCnt."','".$insert_qry_arr1_tempVal['PlayerVersion']."','".$insert_qry_arr1_tempVal['token']."','".$insert_qry_arr1_tempVal['CurrentPlaylist']."','".$insert_qry_arr1_tempVal['CurrentPlaylistFileCount']."')";
                     }
                 }
                     

@@ -116,7 +116,8 @@ $(function(){
         {
             // Do what you want to do with your response
             // This return statement is necessary to remove progress bar after uploading.
-            return file.previewElement.classList.add("dz-success");
+            file.previewElement.parentNode.removeChild(file.previewElement);
+            //return file.previewElement.classList.add("dz-success");
         }
   };
 })

@@ -83,8 +83,9 @@ class DoctorsController extends Controller
         $data_connection2 = $this->getDoctrine()->getManager();
         $allDoctorData = $data_connection2->getConnection()
                     ->fetchAll($sql_data_count);
-        $options['location_id'] = array();
-        
+        $options['location_id'] =   array();
+        $options['doctor_name'] =   array();
+        $options['city']        =   array();
         foreach($allDoctorData as $allDoctorDataVal){
             $options['location_id'][$allDoctorDataVal['location_id']] = $allDoctorDataVal['location_id'];
             $options['doctor_name'][$allDoctorDataVal['name']] = $allDoctorDataVal['name'];
@@ -165,20 +166,6 @@ class DoctorsController extends Controller
             if(move_uploaded_file($_FILES['file']['tmp_name'],$uploaded_file)){
                 
                 $lines = $this->fromCSVFile($uploaded_file);
-                /*
-                $insert_qry_here = 'INSERT INTO playerlogs (location_id, datetime, title, artist_name, playlist_name, category_name) VALUES ';
-	
-                foreach($lines as $insert_qry_arr1_tempVal){
-                    $formated_date = '';
-                    $date = new \DateTime($insert_qry_arr1_tempVal['DateTime']);
-                    $formated_date = $date->format('Y-m-d H:i:s');
-                    $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."','".$formated_date."','".$insert_qry_arr1_tempVal['Title']."','".$insert_qry_arr1_tempVal['ArtistName']."','".$insert_qry_arr1_tempVal['PlaylistName']."','".$insert_qry_arr1_tempVal['CategoryName']."')";
-                }
-                    
-                $insert_qry_here    .=  implode(", ",$insert_qry_data);
-                $insert_qry_here    .=  ';';
-                */
-                    //prx($lines);
                 
                     $insert_qry_here = 'INSERT INTO doctors (location_id, network_id, name, mobile, ll_num1, ll_num2, receptionist_name, receptioist_mobile, city, state, country, pincode, address, morning_time_from, morning_time_to, evening_time_from, evening_time_to) VALUES ';
                     foreach($lines as $insert_qry_arr1_tempVal){
