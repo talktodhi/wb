@@ -188,13 +188,12 @@ class DoctorsController extends Controller
                             }
                         }
                     }
-                    //prx($insert_qry_data);
+                    
                     if(count($insert_qry_data) > 0){
                         $insert_qry_here    .=  implode(", ",$insert_qry_data);
-
                         $insert_qry_here    .= '  ON DUPLICATE KEY UPDATE network_id=VALUES(network_id), name=VALUES(name), mobile=VALUES(mobile), ll_num1=VALUES(ll_num1), ll_num2=VALUES(ll_num2), receptionist_name=VALUES(receptionist_name), receptioist_mobile=VALUES(receptioist_mobile), city=VALUES(city), state=VALUES(state), country=VALUES(country), pincode=VALUES(pincode), address=VALUES(address), morning_time_from=VALUES(morning_time_from), morning_time_to=VALUES(morning_time_to), evening_time_from=VALUES(evening_time_from), evening_time_to=VALUES(evening_time_to)';
                         $insert_qry_here    .=  ';';
-                
+                        
                         $em = $this->getDoctrine()->getManager();
                         $conn = $em->getConnection();
                         $conn->prepare($insert_qry_here)->execute();

@@ -21,39 +21,48 @@
                 <div class="col-xs-12">
                     <!-- PAGE CONTENT BEGINS -->
                     <div>
-                        <form class="form-horizontal message-form col-xs-12" method="post" id="id-message-form">
-                            <div>
-                                <div class="form-group">
-                                    <label for="form-field-subject" class="col-sm-3 control-label no-padding-right">Playlist Name:</label>
-                                    <div class="col-sm-6 col-xs-12">
-                                        <div class="input-icon block col-xs-12 no-padding">
-                                            <input type="text" placeholder="Playlist Name" id="form-field-subject" name="playlist_name" class="col-xs-12" maxlength="100">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="hr hr-18 dotted"></div>
-                                <div class="form-group no-margin-bottom">
-                                    <label class="col-sm-3 control-label no-padding-right">Playlist CSV:</label>
-                                    <div class="col-sm-9">
-                                        <div id="form-attachments">
-                                            <div class="form-group file-input-container">
-                                                <div class="col-sm-7">
-                                                    <!--<label class="ace-file-input width-90 inline"><input type="file" name="attachment"><span data-title="Choose" class="ace-file-container"><span data-title="No File ..." class="ace-file-name"><i class=" ace-icon fa fa-upload"></i></span></span><a href="#" class="remove"><i class=" ace-icon fa fa-times"></i></a></label>-->
-                                                    <input name="playlistfile" type="file" id="id-input-file-2" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="align-right">
-                                    <button class="btn btn-sm btn-danger" onClick="submitForm();" type="button" id="id-add-attachment">
-                                        <i class="ace-icon fa fa-paperclip bigger-140"></i>
-                                        Save Playlist
-                                    </button>
-                                </div>
-                                <div class="space"></div>
-                            </div>
-			</form>
+<form class="form-horizontal message-form col-xs-12" method="post" id="id-message-form">
+									<div>
+
+										<div class="form-group">
+											<label for="form-field-subject" class="col-sm-3 control-label no-padding-right">Playlist Name:</label>
+
+											<div class="col-sm-6 col-xs-12">
+												<div class="input-icon block col-xs-12 no-padding">
+													<input type="text" placeholder="Playlist Name" id="form-field-subject" name="playlist_name" class="col-xs-12" maxlength="100">
+													<!--<i class="ace-icon fa fa-comment-o"></i>-->
+												</div>
+											</div>
+										</div>
+
+
+										<div class="hr hr-18 dotted"></div>
+
+										<div class="form-group no-margin-bottom">
+											<label class="col-sm-3 control-label no-padding-right">Playlist CSV:</label>
+
+											<div class="col-sm-9">
+												<div id="form-attachments">
+													<div class="form-group file-input-container">
+                                                                                                            <div class="col-sm-7">
+                                                                                                                <!--<label class="ace-file-input width-90 inline"><input type="file" name="attachment"><span data-title="Choose" class="ace-file-container"><span data-title="No File ..." class="ace-file-name"><i class=" ace-icon fa fa-upload"></i></span></span><a href="#" class="remove"><i class=" ace-icon fa fa-times"></i></a></label>-->
+                                                                                                                <input name="playlistfile" type="file" id="id-input-file-2" />
+                                                                                                            </div>
+                                                                                                        </div>
+												</div>
+											</div>
+										</div>
+
+										<div class="align-right">
+											<button class="btn btn-sm btn-danger" onClick="submitForm();" type="button" id="id-add-attachment">
+												<i class="ace-icon fa fa-paperclip bigger-140"></i>
+												Save Playlist
+											</button>
+										</div>
+
+										<div class="space"></div>
+									</div>
+								</form>
                     </div>
                     <div id="preview-template" class="hide">
                         <div class="dz-preview dz-file-preview">

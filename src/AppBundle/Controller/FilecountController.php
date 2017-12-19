@@ -6,9 +6,11 @@ use Commonfiles\Utils\UtilityClass;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpFoundation\Session\Storage\Handler\NativeFileSessionHandler;
+
 
 
 
@@ -157,8 +159,28 @@ class FilecountController extends Controller
         $data['main_menu']  =   'filecount';
         $data['sub_menu']   =   'filecount_upload';
         
-        //$utilityClass = new UtilityClass();
         
+        
+            $dateRange_1 = $_POST['date-range-picker1'];
+            //pr($_POST);
+            $dateRange_1_temp = explode(' - ',$dateRange_1);
+             
+            $dateRange_1_from      = $dateRange_1_temp[0];
+            $dateRange_1_to        = $dateRange_1_temp[1];
+            
+            $period = new \DatePeriod(
+                 new \DateTime($dateRange_1_from),
+                 new \DateInterval('P1D'),
+                 new \DateTime($dateRange_1_to)
+            );
+            
+            $dateRange = array();
+            foreach($period as $date){
+                $dateRange[] = $date->format("Y-m-d");
+            }
+            if(count($dateRange) == 0){
+                $dateRange[] = $dateRange_1_from;
+            }
         if(!empty($_FILES)){
             $filename = basename($_FILES['file']['name']);
             $ext = substr($filename, strrpos($filename, '.') + 1);
@@ -167,18 +189,10 @@ class FilecountController extends Controller
             $fileName = $_FILES['file']['name'];
             $uploaded_file = '../web/uploaded_docs/filecount/'.$fileName;
             
-            $sql_data_count = 'SELECT * FROM datapincode ';
-            $data_connection2 = $this->getDoctrine()->getManager();
-            $allPincode = $data_connection2->getConnection()
-                    ->fetchAll($sql_data_count);
-            $pincode    =   array();
-            foreach($allPincode as $allPincodeVal){
-                $pincode[] = $allPincodeVal['pincode'];
-            }
             if(move_uploaded_file($_FILES['file']['tmp_name'],$uploaded_file)){
                 error_reporting(0);
                 $lines = $this->fromCSVFile($uploaded_file);
-                $insert_qry_here = 'INSERT INTO device_file_count (location_id, network_id, status, download_count, total_count, player_version,token,CurrentPlaylist,CurrentPlaylistFileCount) VALUES ';
+                $insert_qry_here = 'INSERT INTO device_file_count (location_id, date, network_id, status, download_count, total_count, player_version,token,CurrentPlaylist,CurrentPlaylistFileCount) VALUES ';
 	
                 foreach($lines as $insert_qry_arr1_tempVal){
                     
@@ -190,23 +204,29 @@ class FilecountController extends Controller
                         $downloadCnt    =   0;
                         $totalCnt       =   0;
                     }
-                    
-                    if($insert_qry_arr1_tempVal['TokenId'] > 0){
-                        $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."','".$insert_qry_arr1_tempVal['PlayerNo']."','".$insert_qry_arr1_tempVal['PlayerStatus']."','".$downloadCnt."','".$totalCnt."','".$insert_qry_arr1_tempVal['PlayerVersion']."','".$insert_qry_arr1_tempVal['token']."','".$insert_qry_arr1_tempVal['CurrentPlaylist']."','".$insert_qry_arr1_tempVal['CurrentPlaylistFileCount']."')";
+                    foreach($dateRange as $dateRangeVal){
+                        if($insert_qry_arr1_tempVal['TokenId'] > 0){
+                            $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."','".$dateRangeVal."','".$insert_qry_arr1_tempVal['PlayerNo']."','".$insert_qry_arr1_tempVal['PlayerStatus']."','".$downloadCnt."','".$totalCnt."','".$insert_qry_arr1_tempVal['PlayerVersion']."','".$insert_qry_arr1_tempVal['token']."','".$insert_qry_arr1_tempVal['CurrentPlaylist']."','".$insert_qry_arr1_tempVal['CurrentPlaylistFileCount']."')";
+                        }
                     }
                 }
                     
                 $insert_qry_here    .=  implode(", ",$insert_qry_data);
+                //$insert_qry_here    .=  ';';
+                $insert_qry_here    .= '  ON DUPLICATE KEY UPDATE network_id=VALUES(network_id), status=VALUES(status), download_count=VALUES(download_count), total_count=VALUES(total_count), player_version=VALUES(player_version), token=VALUES(token), CurrentPlaylist=VALUES(CurrentPlaylist), CurrentPlaylistFileCount=VALUES(CurrentPlaylistFileCount)';
                 $insert_qry_here    .=  ';';
-                
+                        
                 $em = $this->getDoctrine()->getManager();
                 $conn = $em->getConnection();
                 $conn->prepare($insert_qry_here)
                  ->execute();
+                $return['sucess'] = 'File status added successfully.';
             }
+            
+        }else{
+            $return['error'] = 'File cannot be left blank.';
         }
-        echo "Done success";
-        exit;
+        return new JsonResponse($return);
     }
     
     private function fromCSVFile( $file) {
