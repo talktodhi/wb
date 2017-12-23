@@ -118,7 +118,22 @@ $(function(){
             // This return statement is necessary to remove progress bar after uploading.
             file.previewElement.parentNode.removeChild(file.previewElement);
             //return file.previewElement.classList.add("dz-success");
-        }
+        },
+    error: function(file, errorMessage, xhr) {
+
+        // Trigger an error on submit
+        Dropzone.onSubmitComplete({
+            file: file,
+            xhr: xhr
+        });
+
+        // Allow file to be reuploaded !
+        file.status = Dropzone.QUEUED;
+        // this.cancelUpload(file);
+        // this.disable();
+        // this.uploadFile(file);
+
+    }
   };
 })
 
