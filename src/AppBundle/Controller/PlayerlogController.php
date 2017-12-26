@@ -186,6 +186,7 @@ class PlayerlogController extends Controller
                 $previousData = array();
                 $insert_qry_data = array();
                 foreach($lines as $insert_qry_arr1_tempVal){
+                    /*
                     $date = new \DateTime($insert_qry_arr1_tempVal['DateTime']);
                     $just_date = $date->format('Y-m-d');
                     if(!isset($previousData[$insert_qry_arr1_tempVal['TokenId']][$just_date])){
@@ -201,17 +202,18 @@ class PlayerlogController extends Controller
                             }
                         }
                     }
-                    
+                    */
                     $formated_date = '';
                     $date = new \DateTime($insert_qry_arr1_tempVal['DateTime']);
                     $formated_date = $date->format('Y-m-d H:i:s');
-                    if(!isset($previousData[$insert_qry_arr1_tempVal['TokenId']][$just_date][$formated_date])){
+                    //if(!isset($previousData[$insert_qry_arr1_tempVal['TokenId']][$just_date][$formated_date])){
                         $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."','".$formated_date."','".$insert_qry_arr1_tempVal['Title']."','".$insert_qry_arr1_tempVal['ArtistName']."','".$insert_qry_arr1_tempVal['Playlistname']."','".$insert_qry_arr1_tempVal['CategoryName']."')";
-                    }
+                   // }
                 }
                //     prx($insert_qry_data);
                 if(count($insert_qry_data) > 0){
                     $insert_qry_here    .=  implode(", ",$insert_qry_data);
+                    $insert_qry_here    .= '  ON DUPLICATE KEY UPDATE title=VALUES(title), artist_name=VALUES(artist_name), playlist_name=VALUES(playlist_name), category_name=VALUES(category_name)';
                     $insert_qry_here    .=  ';';
 
                     $em = $this->getDoctrine()->getManager();
