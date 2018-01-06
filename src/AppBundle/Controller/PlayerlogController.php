@@ -92,7 +92,7 @@ class PlayerlogController extends Controller
         $dataSet = $em->getConnection()
                     ->fetchAll($sql_data);
         //prx($dataSet);
-        $sql_data_count = 'SELECT * FROM playerlogs ';
+        $sql_data_count = 'SELECT DISTINCT location_id FROM playerlogs where location_id > 0';
         $data_connection2 = $this->getDoctrine()->getManager();
         $allDoctorData = $data_connection2->getConnection()
                     ->fetchAll($sql_data_count);
@@ -105,7 +105,11 @@ class PlayerlogController extends Controller
         }
         
         $data['options']    =   $options;
-        $dataCount['count'] =   count($allDoctorData);
+        $sql_data_count2 = 'SELECT count(*) as cnt FROM playerlogs where location_id > 0';
+        $data_connection3 = $this->getDoctrine()->getManager();
+        $allDoctorDataCount = $data_connection3->getConnection()
+                    ->fetchAll($sql_data_count2);
+        $dataCount['count'] =   $allDoctorDataCount[0]['cnt'];
         $data['total_records']          =   $dataCount['count'];
         $data['playerlog_list']   =   $dataSet;
         if(isset($_GET)){
@@ -185,6 +189,7 @@ class PlayerlogController extends Controller
                 $insert_qry_here = 'INSERT INTO playerlogs (location_id, datetime, title, artist_name, playlist_name, category_name) VALUES ';
                 $previousData = array();
                 $insert_qry_data = array();
+                $i = 0;
                 foreach($lines as $insert_qry_arr1_tempVal){
                     /*
                     $date = new \DateTime($insert_qry_arr1_tempVal['DateTime']);
@@ -203,14 +208,19 @@ class PlayerlogController extends Controller
                         }
                     }
                     */
+                    if($i == 0){
+                        $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."','0000-00-00 00:00:00','NULL','NULL','NULL','NULL')";
+                    }
                     $formated_date = '';
                     $date = new \DateTime($insert_qry_arr1_tempVal['DateTime']);
                     $formated_date = $date->format('Y-m-d H:i:s');
                     //if(!isset($previousData[$insert_qry_arr1_tempVal['TokenId']][$just_date][$formated_date])){
                         $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['TokenId']."','".$formated_date."','".$insert_qry_arr1_tempVal['Title']."','".$insert_qry_arr1_tempVal['ArtistName']."','".$insert_qry_arr1_tempVal['Playlistname']."','".$insert_qry_arr1_tempVal['CategoryName']."')";
                    // }
+                   
+                   $i++;
                 }
-               //     prx($insert_qry_data);
+                
                 if(count($insert_qry_data) > 0){
                     $insert_qry_here    .=  implode(", ",$insert_qry_data);
                     $insert_qry_here    .= '  ON DUPLICATE KEY UPDATE title=VALUES(title), artist_name=VALUES(artist_name), playlist_name=VALUES(playlist_name), category_name=VALUES(category_name)';
@@ -221,6 +231,8 @@ class PlayerlogController extends Controller
                     $conn->prepare($insert_qry_here)
                      ->execute();
                 }
+                
+                
             }
         }
        // echo "DOne success";
@@ -356,5 +368,123 @@ class PlayerlogController extends Controller
       
         return $this->render('default/daterangeanalytics.html.twig',array('data'=>$data));
     }
-       
+ 
+    /**
+     * @Route("/sendmailtest", name="sendmailtest")
+     */
+    public function sendmailtestAction(Request $request)
+    {
+        error_reporting(E_ALL);
+        //$phpmailer = 
+        $message = (new \Swift_Message('Hello Email'))
+        ->setFrom('talktodhi@gmail.com')
+        ->setTo('dhiraj.bastwade@gmail.com')
+        ->setBody(
+            $this->renderView(
+                // app/Resources/views/Emails/registration.html.twig
+                'default/registration.html.twig',
+                array('name' => "Diraj")
+            ),
+            'text/html'
+        );
+        /*
+         * If you also want to include a plaintext version of the message
+        ->addPart(
+            $this->renderView(
+                'Emails/registration.txt.twig',
+                array('name' => $name)
+            ),
+            'text/plain'
+        )
+        */
+                
+
+        $this->get('mailer')->send($message);
+        echo "done";
+        exit;
+        $session                        =   $request->getSession();
+        $user                           =   $session->get('user');
+        if($user['id'] < 1){
+            //$this->redirectToRoute('login');
+            return $this->redirect($this->generateUrl("logout"));
+        }
+        $data = array();
+        
+        $params = array();
+        $data = array();
+        $router = $this->get('router');
+        
+        $data['main_menu']  =   'analysis';
+        $data['sub_menu']   =   'daterange_analysis';
+        
+        if(isset($_POST['date-range-picker1'])){
+            $dataArr1 = array();
+            $dataArr2 = array();
+            
+            $dateRange_1 = $_POST['date-range-picker1'];
+            $dateRange_2 = $_POST['date-range-picker2'];
+            //pr($_POST);
+            $dateRange_1_temp = explode(' - ',$dateRange_1);
+            $dateRange_2_temp = explode(' - ',$dateRange_2);
+             
+            $dateRange_1_from      = $dateRange_1_temp[0];
+            $dateRange_1_to        = $dateRange_1_temp[1];
+             
+            $dateRange_2_from      = $dateRange_2_temp[0];
+            $dateRange_2_to        = $dateRange_2_temp[1];
+             //SELECT DISTINCT location_id FROM playerlogs WHERE datetime BETWEEN '2017-12-03' AND '2017-12-11' ORDER BY `id` ASC 
+            $sql_set1 = "SELECT DISTINCT location_id  FROM playerlogs WHERE datetime BETWEEN '".$dateRange_1_from."' AND '".$dateRange_1_to."' order by location_id";
+            $em = $this->getDoctrine()->getManager();
+            $dataSet1 = $em->getConnection()
+                ->fetchAll($sql_set1);
+            foreach($dataSet1 as $dataSet1Val){
+                $dataArr1[] =  $dataSet1Val['location_id'];
+            }
+            
+            $sql_set2 = "SELECT DISTINCT location_id  FROM playerlogs WHERE datetime BETWEEN '".$dateRange_2_from."' AND '".$dateRange_2_to."' order by location_id";
+            $em = $this->getDoctrine()->getManager();
+            $dataSet2 = $em->getConnection()
+                ->fetchAll($sql_set2);
+            foreach($dataSet2 as $dataSet1Val2){
+                $dataArr2[] =  $dataSet1Val2['location_id'];
+            }
+
+            foreach($dataArr1 as $dataArr1Val){
+                if(!in_array($dataArr1Val, $dataArr2)){
+                   $inactiveDevices[] =  $dataArr1Val;
+                }
+            }
+            
+            foreach($dataArr2 as $dataArr2Val){
+                if(!in_array($dataArr2Val, $dataArr1)){
+                   $newDevices[] =  $dataArr2Val;
+                }
+            }
+            
+            $sql_inactive = "SELECT *  FROM doctors WHERE location_id IN (".implode(',',$inactiveDevices).") order by state asc";
+            $em = $this->getDoctrine()->getManager();
+            $sql_inactiveData = $em->getConnection()
+                ->fetchAll($sql_inactive);
+            foreach($sql_inactiveData as $sql_inactiveDataVal){
+                $sql_inactiveDataArr[$sql_inactiveDataVal['location_id']] =  $sql_inactiveDataVal;
+            }
+            
+            $sql_newdevice = "SELECT *  FROM doctors WHERE location_id IN (".implode(',',$newDevices).") order by state asc";
+            $em = $this->getDoctrine()->getManager();
+            $sql_newDevicesData = $em->getConnection()
+                ->fetchAll($sql_newdevice);
+            foreach($sql_newDevicesData as $sql_newDevicesDataVal){
+                $sql_newdeviceDataArr[$sql_newDevicesDataVal['location_id']] =  $sql_newDevicesDataVal;
+            }
+            
+            $data['inactiveDeviceID']       =   $inactiveDevices;
+            $data['inactiveDeviceData']     =   $sql_inactiveDataArr;
+            
+            $data['newDeviceID']            =   $newDevices;
+            $data['newDeviceData']          =   $sql_newdeviceDataArr;
+        }
+        
+      
+        return $this->render('default/daterangeanalytics.html.twig',array('data'=>$data));
+    }
 }

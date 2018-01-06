@@ -155,14 +155,13 @@ class FilecountController extends Controller
      */
     public function uploadprocessAction(Request $request)
     {
-        $data = array();
-        $data['main_menu']  =   'filecount';
-        $data['sub_menu']   =   'filecount_upload';
+            $data = array();
+            $data['main_menu']  =   'filecount';
+            $data['sub_menu']   =   'filecount_upload';
         
         
         
             $dateRange_1 = $_POST['date-range-picker1'];
-            //pr($_POST);
             $dateRange_1_temp = explode(' - ',$dateRange_1);
              
             $dateRange_1_from      = $dateRange_1_temp[0];
@@ -212,7 +211,6 @@ class FilecountController extends Controller
                 }
                     
                 $insert_qry_here    .=  implode(", ",$insert_qry_data);
-                //$insert_qry_here    .=  ';';
                 $insert_qry_here    .= '  ON DUPLICATE KEY UPDATE network_id=VALUES(network_id), status=VALUES(status), download_count=VALUES(download_count), total_count=VALUES(total_count), player_version=VALUES(player_version), token=VALUES(token), CurrentPlaylist=VALUES(CurrentPlaylist), CurrentPlaylistFileCount=VALUES(CurrentPlaylistFileCount)';
                 $insert_qry_here    .=  ';';
                         
@@ -220,6 +218,27 @@ class FilecountController extends Controller
                 $conn = $em->getConnection();
                 $conn->prepare($insert_qry_here)
                  ->execute();
+                
+                $insert_qry_data  = array();
+                $sqlAddDummySelect = 'SELECT DISTINCT P.location_id FROM playerlogs P LEFT JOIN doctors d ON P.location_id = d.location_id WHERE d.city IS NULL AND d.pincode IS NULL';
+                
+                $data_connection2 = $this->getDoctrine()->getManager();
+                $sqlAddDummyData = $data_connection2->getConnection()
+                        ->fetchAll($sqlAddDummySelect);
+                $insert_qry_here = 'INSERT INTO doctors (location_id, network_id, name, mobile, ll_num1, ll_num2, receptionist_name, receptioist_mobile, city, state, country, pincode, address, morning_time_from, morning_time_to, evening_time_from, evening_time_to) VALUES ';
+                foreach($sqlAddDummyData as $sqlAddDummyDataVal){
+                    $location_id = $sqlAddDummyDataVal['location_id'];
+                    $insert_qry_data[] = "('".$location_id."','Waybeyond','Waybeyond','','','','Waybeyond','','Mumbai','Maharashtra','INDIA','400018','Waybeyond Media PVT LTD Mumbai','09:30:00','13:30:00','15:00:00','21:00:00')";
+                }
+                if(count($insert_qry_data) > 0){
+                        $insert_qry_here    .=  implode(", ",$insert_qry_data);
+                        $insert_qry_here    .= '  ON DUPLICATE KEY UPDATE network_id=VALUES(network_id), name=VALUES(name), mobile=VALUES(mobile), ll_num1=VALUES(ll_num1), ll_num2=VALUES(ll_num2), receptionist_name=VALUES(receptionist_name), receptioist_mobile=VALUES(receptioist_mobile), city=VALUES(city), state=VALUES(state), country=VALUES(country), pincode=VALUES(pincode), address=VALUES(address), morning_time_from=VALUES(morning_time_from), morning_time_to=VALUES(morning_time_to), evening_time_from=VALUES(evening_time_from), evening_time_to=VALUES(evening_time_to)';
+                        $insert_qry_here    .=  ';';
+                        
+                        $em = $this->getDoctrine()->getManager();
+                        $conn = $em->getConnection();
+                        $conn->prepare($insert_qry_here)->execute();
+                    }
                 $return['sucess'] = 'File status added successfully.';
             }
             

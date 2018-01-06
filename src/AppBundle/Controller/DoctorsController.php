@@ -163,19 +163,25 @@ class DoctorsController extends Controller
             foreach($allPincode as $allPincodeVal){
                 $pincode[] = $allPincodeVal['pincode'];
             }
+            
             if(move_uploaded_file($_FILES['file']['tmp_name'],$uploaded_file)){
                 
                 $lines = $this->fromCSVFile($uploaded_file);
-                
+
                     $insert_qry_here = 'INSERT INTO doctors (location_id, network_id, name, mobile, ll_num1, ll_num2, receptionist_name, receptioist_mobile, city, state, country, pincode, address, morning_time_from, morning_time_to, evening_time_from, evening_time_to) VALUES ';
+                    $insert_qry_here2 = 'INSERT INTO playerlogs (location_id, datetime, title, artist_name, playlist_name, category_name) VALUES ';
                     foreach($lines as $insert_qry_arr1_tempVal){
-                        //prx($insert_qry_arr1_tempVal);
+                        
 			$formated_date = '';
                         //if(isset($insert_qry_arr1_tempVal['Location-ID']) && ($insert_qry_arr1_tempVal['Network-ID']) && ($insert_qry_arr1_tempVal['Doctor Name'])&& ($insert_qry_arr1_tempVal['Doctors Mobile Number'])&& ($insert_qry_arr1_tempVal['Landline Number of clinic 1'])&& ($insert_qry_arr1_tempVal['Landline Number of clinic 2'])&& ($insert_qry_arr1_tempVal['Receptionst Name'])&& ($insert_qry_arr1_tempVal['Receptionst Mobile Number'])&& ($insert_qry_arr1_tempVal['City'])&& ($insert_qry_arr1_tempVal['State'])&& ($insert_qry_arr1_tempVal['Pincode'])&& ($insert_qry_arr1_tempVal['Address'])){
                         if((array_key_exists('Location-ID',$insert_qry_arr1_tempVal)) && (array_key_exists('Network-ID', $insert_qry_arr1_tempVal)) && (array_key_exists('Doctor Name', $insert_qry_arr1_tempVal)) && (array_key_exists('Doctors Mobile Number', $insert_qry_arr1_tempVal)) && (array_key_exists('Landline Number of clinic 1', $insert_qry_arr1_tempVal)) && (array_key_exists('Landline Number of clinic 2', $insert_qry_arr1_tempVal)) && (array_key_exists('Receptionst Name', $insert_qry_arr1_tempVal)) && (array_key_exists('Receptionst Mobile Number', $insert_qry_arr1_tempVal)) && (array_key_exists('City', $insert_qry_arr1_tempVal)) && (array_key_exists('State', $insert_qry_arr1_tempVal)) && (array_key_exists('Pincode', $insert_qry_arr1_tempVal)) && (array_key_exists('Address', $insert_qry_arr1_tempVal)) ){
+                            
+                            $insert_qry_data2[] = "('".$insert_qry_arr1_tempVal['Location-ID']."','0000-00-00 00:00:00','NULL','NULL','NULL','NULL')";
+                            
                         //$thisArrKey = array_keys($insert_qry_arr1_tempVal);
                             if(($insert_qry_arr1_tempVal['Location-ID'] > 0) && ($insert_qry_arr1_tempVal['Pincode'] > 0) && (trim($insert_qry_arr1_tempVal['City']) != '') && (trim($insert_qry_arr1_tempVal['State']) != '')){
                                 $insert_qry_data[] = "('".$insert_qry_arr1_tempVal['Location-ID']."','".$insert_qry_arr1_tempVal['Network-ID']."','".htmlspecialchars($insert_qry_arr1_tempVal['Doctor Name'], ENT_QUOTES)."','".$insert_qry_arr1_tempVal['Doctors Mobile Number']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 1']."','".$insert_qry_arr1_tempVal['Landline Number of clinic 2']."','".htmlspecialchars($insert_qry_arr1_tempVal['Receptionst Name'], ENT_QUOTES)."','".$insert_qry_arr1_tempVal['Receptionst Mobile Number']."','".$insert_qry_arr1_tempVal['City']."','".$insert_qry_arr1_tempVal['State']."','INDIA','".$insert_qry_arr1_tempVal['Pincode']."','".str_replace("'"," ",trim(preg_replace('/\s\s+/', ' ', $insert_qry_arr1_tempVal['Address'])))."','09:30:00','13:30:00','15:00:00','21:00:00')";
+                                
                                 if((!in_array($insert_qry_arr1_tempVal['Pincode'], $pincode)) && ($insert_qry_arr1_tempVal['Pincode'] > 0)){
                                     //$insert_qry_arr1_tempVal['Pincode']
                                     if($insert_qry_arr1_tempVal['Pincode'] != ''){
@@ -197,6 +203,16 @@ class DoctorsController extends Controller
                         $em = $this->getDoctrine()->getManager();
                         $conn = $em->getConnection();
                         $conn->prepare($insert_qry_here)->execute();
+                    }
+
+                    if(count($insert_qry_data2) > 0){
+                        $insert_qry_here2    .=  implode(", ",$insert_qry_data2);
+                        $insert_qry_here2    .= '  ON DUPLICATE KEY UPDATE title=VALUES(title), artist_name=VALUES(artist_name), playlist_name=VALUES(playlist_name), category_name=VALUES(category_name)';
+                        $insert_qry_here2    .=  ';';
+                        
+                        $em2 = $this->getDoctrine()->getManager();
+                        $conn2 = $em2->getConnection();
+                        $conn2->prepare($insert_qry_here2)->execute();
                     }
             }
         }
