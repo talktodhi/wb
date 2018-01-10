@@ -78,7 +78,7 @@ class FilecountController extends Controller
             $whereQry .= " where ".implode(" OR ", $where);
         }
         $sql_data .= $whereQry;
-        $sql_data .= " LIMIT ".$start_from.",".$limit;
+        $sql_data .= " order by date DESC LIMIT ".$start_from.",".$limit;
         
         $em = $this->getDoctrine()->getManager();
         $dataSet = $em->getConnection()
@@ -195,8 +195,8 @@ class FilecountController extends Controller
 	
                 foreach($lines as $insert_qry_arr1_tempVal){
                     
-                    if(isset($insert_qry_arr1_tempVal['FileCount'])){
-                        $countsTemp     =   explode('/',$insert_qry_arr1_tempVal['FileCount']);
+                    if(isset($insert_qry_arr1_tempVal['CurrentPlaylistFileCount'])){
+                        $countsTemp     =   explode('/',$insert_qry_arr1_tempVal['CurrentPlaylistFileCount']);
                         $downloadCnt    =   (int)$countsTemp[0];
                         $totalCnt       =   (int)$countsTemp[1];
                     }else{
