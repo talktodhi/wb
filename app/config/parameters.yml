@@ -6,7 +6,9 @@ parameters:
     database_user: wbdbdevinst
     database_password: wbdbdevinst
     mailer_transport: smtp
-    mailer_host: 127.0.0.1
-    mailer_user: null
-    mailer_password: null
+    mailer_host: email-smtp.us-east-1.amazonaws.com
+    mailer_user: AKIAJO3QS3ACPJHFOU6Q
+    mailer_password: Aq6CgBrrjhvm7IfkqQ+qidXyTXyLneEuSU1sSLtp6IGM
+    mailer_encryption: tls
+    mailer_port: 587
     secret: hhggjhg564545rfgfh

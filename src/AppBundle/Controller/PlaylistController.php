@@ -214,7 +214,24 @@ class PlaylistController extends Controller
                         $conn = $em->getConnection();
                         $conn->prepare($insert_qry_here)
                          ->execute();
+                        /*
+                        #trncate old data #
+                        $truncateqry = 'TRUNCATE cq_brand_product_dynamic';
+                        $em = $this->getDoctrine()->getManager();
+                        $conn2 = $em->getConnection();
+                        $conn2->prepare($truncateqry)
+                         ->execute();
+                        
+                        ## create refreshed data #
+                        $refreshQry = 'INSERT INTO cq_brand_product_dynamic (playlist_name, content_id, brand, product) SELECT playlist_name, content_id, brand, product FROM playlist_data  GROUP BY playlist_name, content_id';
+                        $em = $this->getDoctrine()->getManager();
+                        $conn3 = $em->getConnection();
+                        $conn3->prepare($refreshQry)
+                         ->execute();
+                        */
                         $return['sucess'] = 'Playlist added successfully.';
+                        
+                        
                     }
                 }
             
