@@ -86,12 +86,15 @@ class PlayerlogController extends Controller
         
         // AND `datetime` BETWEEN '2017-01-01 00:00:00.000000' AND '2017-11-30 00:00:00.000000'
         
-        $sql_data .= " LIMIT ".$start_from.",".$limit;
-        //prx($sql_data);
-        $em = $this->getDoctrine()->getManager();
-        $dataSet = $em->getConnection()
+        $sql_data .= " order by datetime DESC LIMIT ".$start_from.",".$limit;
+        
+        $dataSet    =   array();
+        if(isset($_GET['location_id']) || isset($_GET['from_date'])){
+            $em = $this->getDoctrine()->getManager();
+            $dataSet = $em->getConnection()
                     ->fetchAll($sql_data);
-        //prx($dataSet);
+        }
+       
         $sql_data_count = 'SELECT DISTINCT location_id FROM playerlogs where location_id > 0';
         $data_connection2 = $this->getDoctrine()->getManager();
         $allDoctorData = $data_connection2->getConnection()
@@ -105,13 +108,14 @@ class PlayerlogController extends Controller
         }
         
         $data['options']    =   $options;
-        $sql_data_count2 = 'SELECT count(*) as cnt FROM playerlogs where location_id > 0';
+        $sql_data_count2 = 'SELECT count(*) as cnt FROM playerlogs '.$whereQry;
         $data_connection3 = $this->getDoctrine()->getManager();
         $allDoctorDataCount = $data_connection3->getConnection()
                     ->fetchAll($sql_data_count2);
         $dataCount['count'] =   $allDoctorDataCount[0]['cnt'];
         $data['total_records']          =   $dataCount['count'];
         $data['playerlog_list']   =   $dataSet;
+       
         if(isset($_GET)){
             $data['get']    = $_GET;
         }
@@ -137,7 +141,15 @@ class PlayerlogController extends Controller
              $pagLink .= "<li><a href='".$rt."'>".$i."</a></li>";  
         }; 
         $pagLink .= "</ul></nav>";
-        $data['paginations'] = $pagLink;
+        $data['paginations'] = '';
+        if(isset($_GET['location_id']) || isset($_GET['from_date'])){
+            $data['paginations'] = $pagLink;
+        }else{
+            $data['current_page']   =       '';
+            $data['countSrNo']      =       '';
+            $data['total_records']  =       0;
+            
+        }
         unset($params['page']);
         $params['page'] =   '';
         $data['url'] =  $router->generate('playerlog_listing', $params);;
