@@ -4,6 +4,7 @@
 
 
 <body class="login-layout">
+    <div class="loader_cover" id="loader_cover" style="display:none;"><div id="loader" class="loader __web-inspector-hide-shortcut__" ></div></div>
     <div class="main-container">
         <div class="main-content">
             <div class="row">
@@ -47,9 +48,14 @@
                                                     <input type="checkbox" class="ace" />
                                                     <span class="lbl"> Remember Me</span>
                                                     </label>-->
-                                                    <button onClick="login();" type="button" class="width-35 pull-right btn btn-sm btn-primary">
+                                                   <button onClick="login();" type="button" class="width-35 pull-right btn btn-sm btn-primary">
                                                     <i class="ace-icon fa fa-key"></i>
                                                     <span class="bigger-110">Login</span>
+                                                    </button>
+                                                   &nbsp;&nbsp;&nbsp;<div class="space"></div>
+                                                    <button onClick="resetpassword();" type="button" class="width-35 pull-right btn btn-sm btn-primary">
+                                                    <i class="ace-icon fa fa-key"></i>
+                                                    <span class="bigger-110">Reset</span>
                                                     </button>
                                                 </div>
                                                 <div class="space-4"></div>
@@ -295,6 +301,63 @@
                                     console.log("Ajax Error found-: \n \n"+XMLHttpRequest.responseText);
                                 }
                         })
+                    }
+                    
+                    function resetpassword(){
+                    var userid = $('#username').val();
+                    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(userid))
+                        {
+                            if (confirm("Are you sure you want to reset password for "+userid+" ?")) {
+                            //    txt = "You pressed OK!";
+                                             $('#loader_cover').show();           
+                            $.ajax({
+                                type:'POST',
+                                async: false,
+                                url: '{{ path('sendmail') }}',
+                                dataType: "json",
+                                data:{'username':$('#username').val()},
+                                success: function(data) {
+                                    if(data['success'] == '1'){
+                                        alert('New password has been sent on Email ID. Please check your Inbox.');
+                                        
+                                    }else{
+                                        alert(data['error']);
+                                        return false;
+                                    }
+                                     window.location = data['redirect_url'];
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                    window.send_request_data="Ajax Error found-: \n \n"+XMLHttpRequest.responseText;
+                                    console.log("Ajax Error found-: \n \n"+XMLHttpRequest.responseText);
+                                }
+                            })
+                            
+                            }
+                        }else{
+                            alert('Invalid Email ID');
+                            return false;
+                        }
+                    /*
+                        $.ajax({
+                                type:'POST',
+                                async: false,
+                                url: '{{ path('login') }}',
+                                dataType: "json",
+                                data:{'username':$('#username').val(),'password':$('#password').val()},
+                                success: function(data) {
+                                    if(data['success'] == '1'){
+                                        window.location = data['redirect_url'];
+                                    }else{
+                                        alert('Invalid login details');
+                                        return false;
+                                    }
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                                    window.send_request_data="Ajax Error found-: \n \n"+XMLHttpRequest.responseText;
+                                    console.log("Ajax Error found-: \n \n"+XMLHttpRequest.responseText);
+                                }
+                        })
+                        */
                     }
                 </script>
 </body>

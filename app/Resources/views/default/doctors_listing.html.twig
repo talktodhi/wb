@@ -111,7 +111,7 @@
                             <input type="checkbox" class="ace ace-switch ace-switch-4" value="1" id="skip-validation">
                             <span class="lbl middle"></span>
                         </label>
-                        <a class='north' href="{{ asset('uploaded_docs/doctors/pl.csv') }}" target="_blank">Download Sample</a>
+                        <a class='north' href="{{ asset('uploaded_docs/doctors/MasterData2.csv') }}" target="_blank">Download Sample</a>
                     </span>
                     
                     <div class="row">
@@ -129,10 +129,10 @@
                                         <th>Location ID</th>
                                         <th>Doctor Name</th>
                                         <th class="hidden-480">Mobile #</th>
-                                        <th>
-                                            <!--<i class="ace-icon fa fa-clock-o bigger-110 hidden-480"></i>-->
+                                       <!-- <th>
+                                            
                                             Data Available
-                                        </th>
+                                        </th>-->
                                         <th class="hidden-480">City</th>
                                         <th>Details</th>
                                     </tr>
@@ -150,25 +150,25 @@
                                         </td>
                                         <td>{{ doctors_list_val['name'] }}</td>
                                         <td class="hidden-480">{{ doctors_list_val['mobile'] }}</td>
-                                        <td>Feb 12</td>
+                                        <!--<td>Feb 12</td>-->
                                         <td class="hidden-480">
                                             {{ doctors_list_val['city'] }}
                                         </td>
                                         <td>
                                             <div class="hidden-sm hidden-xs btn-group">
-                                                <button class="btn btn-xs btn-success">
+                                                <!--<button class="btn btn-xs btn-success">
                                                 <i class="ace-icon fa fa-check bigger-120"></i>
-                                                </button>
+                                                </button>-->
                                                 <button class="btn btn-xs btn-info" onClick="EditDoctorDetails({{ doctors_list_val['location_id'] }})">
                                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                                                 </button>
-                                                <button class="btn btn-xs btn-danger">
+                                               <!-- <button class="btn btn-xs btn-danger">
                                                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                                 </button>
                                                 <button class="btn btn-xs btn-warning">
                                                 <i class="ace-icon fa fa-flag bigger-120"></i>
-                                                </button>
-                                            </div>
+                                                </button>-->
+                                            </div><!--
                                             <div class="hidden-md hidden-lg">
                                                 <div class="inline pos-rel">
                                                     <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
@@ -198,7 +198,7 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-                                            </div>
+                                            </div>-->
                                         </td>
                                     </tr>
                                     {% set Count = Count + 1 %}
@@ -224,9 +224,9 @@
                                         <th>Pincode</th>
                                         <th>Address</th>
                                         <th>Timings</th>
-                                        <th>
+                                       <!-- <th>
                                             Data Available
-                                        </th>
+                                        </th>-->
                                         <th>Details</th>
                                     </tr>
                                 </thead>
@@ -252,22 +252,22 @@
                                         <td >{{ doctors_list_val['address'] }}</td>
                                         <td >{{ doctors_list_val['morning_time_from'] }} To {{ doctors_list_val['morning_time_to'] }} <br/> 
                                             {{ doctors_list_val['evening_time_from'] }} To {{ doctors_list_val['evening_time_to'] }}</td>
-                                        <td>Feb 12</td>
+                                        <!--<td>Feb 12</td>-->
                                         <td>
                                             <div class="hidden-sm hidden-xs btn-group">
-                                                <button class="btn btn-xs btn-success">
+                                                <!--<button class="btn btn-xs btn-success">
                                                 <i class="ace-icon fa fa-check bigger-120"></i>
-                                                </button>
+                                                </button>-->
                                                 <button class="btn btn-xs btn-info" onClick="EditDoctorDetails({{ doctors_list_val['location_id'] }});">
                                                 <i class="ace-icon fa fa-pencil bigger-120"></i>
                                                 </button>
-                                                <button class="btn btn-xs btn-danger">
+                                                <!--<button class="btn btn-xs btn-danger">
                                                 <i class="ace-icon fa fa-trash-o bigger-120"></i>
                                                 </button>
                                                 <button class="btn btn-xs btn-warning">
                                                 <i class="ace-icon fa fa-flag bigger-120"></i>
-                                                </button>
-                                            </div>
+                                                </button>-->
+                                            </div><!--
                                             <div class="hidden-md hidden-lg">
                                                 <div class="inline pos-rel">
                                                     <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
@@ -297,7 +297,7 @@
                                                         </li>
                                                     </ul>
                                                 </div>
-                                            </div>
+                                            </div>-->
                                         </td>
                                     </tr>
                                     {% set Count = Count + 1 %}

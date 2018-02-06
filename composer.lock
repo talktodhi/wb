@@ -1172,16 +1172,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v3.0.29",
+            "version": "v3.0.28",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "bb907234df776b68922eb4b25bfa061683597b6a"
+                "reference": "65eadf9e3fd5c47eee7986b306a5aed8affe6496"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/bb907234df776b68922eb4b25bfa061683597b6a",
-                "reference": "bb907234df776b68922eb4b25bfa061683597b6a",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/65eadf9e3fd5c47eee7986b306a5aed8affe6496",
+                "reference": "65eadf9e3fd5c47eee7986b306a5aed8affe6496",
                 "shasum": ""
             },
             "require": {
@@ -1238,7 +1238,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2017-12-14T19:03:23+00:00"
+            "time": "2017-10-12T17:37:20+00:00"
         },
         {
             "name": "sensiolabs/security-checker",
@@ -1977,16 +1977,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v2.8.33",
+            "version": "v2.8.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "a3bb63a81e5cb9bec9f3c8f30405d3107411ba8c"
+                "reference": "0efa80d0a01f60e28ae5800c94d6288239cefefe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/a3bb63a81e5cb9bec9f3c8f30405d3107411ba8c",
-                "reference": "a3bb63a81e5cb9bec9f3c8f30405d3107411ba8c",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/0efa80d0a01f60e28ae5800c94d6288239cefefe",
+                "reference": "0efa80d0a01f60e28ae5800c94d6288239cefefe",
                 "shasum": ""
             },
             "require": {
@@ -2112,7 +2112,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2018-01-05T06:19:59+00:00"
+            "time": "2017-12-04T22:02:29+00:00"
         },
         {
             "name": "twig/twig",
@@ -2237,16 +2237,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v2.8.33",
+            "version": "v2.8.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "13cdb256a345cf5b05ffa4b5fba0ee3c3902619c"
+                "reference": "e28e3d130b80e7dd7001bb01df681d1a1189ef6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/13cdb256a345cf5b05ffa4b5fba0ee3c3902619c",
-                "reference": "13cdb256a345cf5b05ffa4b5fba0ee3c3902619c",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/e28e3d130b80e7dd7001bb01df681d1a1189ef6e",
+                "reference": "e28e3d130b80e7dd7001bb01df681d1a1189ef6e",
                 "shasum": ""
             },
             "require": {
@@ -2291,7 +2291,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2018-01-03T07:36:31+00:00"
+            "time": "2017-11-21T09:19:30+00:00"
         }
     ],
     "aliases": [],

@@ -105,7 +105,7 @@
                     
                     <div class="hr hr-18 dotted hr-double"></div>
                      <span class="col-sm-4">
-                        <a class='north' href="{{ asset('uploaded_docs/playerlog/IAPTV-PlayersSummary-09-Oct-2017as.csv') }}" target="_blank">Download Sample</a>
+                        <a class='north' href="{{ asset('uploaded_docs/filecount/summary_file.csv') }}" target="_blank">Download Sample</a>
                     </span>
                     <div class="row">
                         <div class="col-xs-12">
@@ -114,14 +114,14 @@
                                     <tr>
                                         <th class="detail-col">Sr. No.</th>
                                         <th>Location ID</th>
-                                        <th>Device Id</th>
-                                        <th class="hidden-480">Status</th>
-                                        <th>
-                                            Downloads
-                                        </th>
+                                        <th>Network Id</th>
+                                        <th class="hidden-480">Status Summary</th>
+                                        <th>Downloads</th>
+                                        <th>Playlist</th>
+                                        <th>Date</th>
                                         <th>Version</th>
                                         <th class="hidden-480">Updated Date</th>
-                                        <th>Details</th>
+                                        <!--<th>Details</th>-->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -138,9 +138,12 @@
                                         <td>{{ filecount_list_val['network_id'] }}</td>
                                         <td class="hidden-480">{{ filecount_list_val['status'] }}</td>
                                         <td>{{ filecount_list_val['download_count'] }} / {{ filecount_list_val['total_count'] }}</td>
+                                        <td>{{ filecount_list_val['CurrentPlaylist'] }}</td>
+                                        <td>{{ filecount_list_val['date'] }}</td>
                                         <td>{{ filecount_list_val['player_version'] }}</td>
                                         <td class="hidden-480">{{ filecount_list_val['update_date'] }}
                                         </td>
+                                        <!--
                                         <td>
                                             <div class="hidden-sm hidden-xs btn-group">
                                                 <button class="btn btn-xs btn-success">
@@ -186,7 +189,7 @@
                                                     </ul>
                                                 </div>
                                             </div>
-                                        </td>
+                                        </td>-->
                                     </tr>
                                     {% set Count = Count + 1 %}
                                     {% endfor %}
